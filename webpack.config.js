@@ -1,5 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
+
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -16,10 +17,10 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader', 'style-loader', 'css-loader'],
+        use: ['babel-loader', 'eslint-loader'],
       },
     ],
   },
-  plugins: [new webpack.optimize.UglifyJsPlugin()],
+  plugins: [new HtmlWebpackPlugin()],
   devtool: 'inline-source-map',
 };
