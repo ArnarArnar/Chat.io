@@ -1,29 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { addUser } from '../../Store/actions';
 
 import PropTypes from 'prop-types';
 
 class LogIn extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userName: '',
-    };
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     userName: '',
+  //   };
+  // }
+  componentDidMount() {
+    this.props.addUser('TestDidMount');
   }
 
   logInUser(userName) {
-    console.log('User name is :', userName);
-    console.log(socket);
-    const { socket } = this.context;
-
-    socket.emit('adduser', userName, function(data) {
-      return data;
-    });
-    socket.emit('users');
-    socket.on('userlist', function(cb) {
-      console.log('usersListener cb', cb);
-    });
+    console.log('LogIn.js > LogInUser > User name is :', userName);
+    this.props.addUser(userName);
   }
 
   logIn(e) {
@@ -38,7 +34,7 @@ class LogIn extends React.Component {
   }
 
   render() {
-    let { userName } = this.state;
+    let { userName } = this.props;
     {
       console.log(userName);
     }
@@ -66,6 +62,12 @@ class LogIn extends React.Component {
 
 LogIn.propTypes = {
   userName: PropTypes.string,
+  addUser: PropTypes.func,
+};
+const mapStateToProps = reduxStoreState => {
+  return {
+    userName: reduxStoreState.userName,
+  };
 };
 
-export default LogIn;
+export default connect(mapStateToProps, { addUser })(LogIn);

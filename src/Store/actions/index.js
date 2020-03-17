@@ -4,19 +4,19 @@ import socketService from '../../services/socketService';
 
 export const addUser = userName => async dispatchEvent => {
   try {
-    const addedUser = socketService.addUser({
-      userName,
-    });
+    console.log('actions > addUser', userName);
+    const addedUser = socketService.addUser(userName);
     dispatchEvent(addUserSuccess({ addedUser }));
   } catch (err) {
     throw new Error(err);
   }
+  console.log('actions > addUser', userName);
 };
 
-export const addUserSuccess = userName => {
+const addUserSuccess = userName => {
   return {
     type: CREATE_USER,
-    payload: { userName },
+    payload: userName,
   };
 };
 
