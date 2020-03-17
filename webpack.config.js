@@ -19,8 +19,18 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader', 'eslint-loader'],
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Chat.io',
+      template: './index.html',
+      inject: 'body',
+    }),
+  ],
   devtool: 'inline-source-map',
 };
