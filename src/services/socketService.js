@@ -5,15 +5,40 @@ const socketService = () => {
 
   const addUser = userName => {
     console.log('socketService > addUser', userName);
-    socket.emit('adduser', userName, function(data) {
-      return data;
+    return new Promise(resolve => {
+      socket.emit('adduser', userName, function(data) {
+        console.log('Callback from addUser socket service', data);
+        resolve(data);
+      });
     });
   };
 
-  const getUserList = () => {
+  const getUserList = async () => {
+    console.log('socketService > getUserList');
     socket.emit('users');
-    socket.on('userlist', function(cb) {
-      console.log('usersListener cb', cb);
+    return new Promise(resolve => {
+      socket.on('userlist', function(data) {
+        console.log(data);
+        resolve(data);
+      });
+    });
+  };
+
+  const getRoomList = async () => {
+    console.log('socketService > getRoomList');
+    socket.emit('rooms');
+    return new Promise(resolve => {
+      socket.on('roomlist', function(data) {
+        console.log('socketService > getRoomList', data);
+        resolve(data);
+      });
+    });
+  };
+
+  const joinRoom = roomName => {
+    console.log('socketService > getUserList');
+    socket.emit('joinroom', roomName, function(data) {
+      return data;
     });
   };
 
@@ -21,9 +46,9 @@ const socketService = () => {
     socket,
     addUser,
     getUserList,
+    getRoomList,
+    joinRoom,
   };
 };
-
-// export const socket = connectToSocketIOServer('http://localhost:8080');
 
 export default socketService();

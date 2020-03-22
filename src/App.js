@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import LogIn from './components/LogIn/LogIn.js';
 //import ChatWindow from './components/ChatWindow/ChatWindow.js';
 import SocketContext from './context/SocketContext';
-import RoomList from './components/RoomList/RoomList.js';
 
+import ViewAllUsers from './components/ViewAllUsers/ViewAllUsers';
+//import ChatWindow from './components/ChatWindow/ChatWindow';
 class App extends React.Component {
   componentDidMount() {}
 
@@ -23,7 +24,7 @@ class App extends React.Component {
     return (
       <div className="container">
         <LogIn />
-        <RoomList />
+        <ViewAllUsers />
       </div>
     );
   }
