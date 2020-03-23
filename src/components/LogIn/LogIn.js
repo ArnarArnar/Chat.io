@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { addUser } from '../../Store/actions';
+//import socketService from '../../services/socketService';
 import ViewAllRooms from '../ViewAllRooms/ViewAllRooms';
 import PropTypes from 'prop-types';
+// import connectToSocketIOServer from 'socket.io-client';
+// const socket = connectToSocketIOServer('http://localhost:8080');
 
 class LogIn extends React.Component {
   constructor(props) {
@@ -14,6 +17,7 @@ class LogIn extends React.Component {
       isLoggedIn: false,
     };
   }
+  async componentDidMount() {}
 
   async addUser(username) {
     return await this.props.addUser(username);
@@ -40,8 +44,7 @@ class LogIn extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  signOut(e) {
-    e.preventDefault();
+  signOut() {
     this.setState({ isLoggedIn: false });
   }
 
@@ -71,6 +74,7 @@ class LogIn extends React.Component {
                 Submit
               </Button>
             </Form>
+            <ViewAllRooms />
           </>
         ) : (
           <>

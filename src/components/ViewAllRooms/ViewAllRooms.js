@@ -12,29 +12,40 @@ class ViewAllRooms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomName: '',
+      hasJoinedRoom: false,
     };
   }
+
   async componentDidMount() {
     await this.props.getRoomList();
   }
 
-  componentDidUpdate() {}
-
-  joinRoom(e) {
+  async joinRoom(e) {
     e.preventDefault(e);
     console.log('joinRoom>e', e.target.innerText);
-    this.props.joinRoom({ room: e.target.innerText + 'X' });
-    this.props.getRoomList();
+
+    const hasJoinedRoom = await this.props.joinRoom({
+      room: e.target.innerText,
+    });
+    console.log('JoinedRoom CB', hasJoinedRoom);
+    if (!hasJoinedRoom) {
+      {
+        console.log('Unable to join room');
+      }
+    } else {
+      this.setState({
+        hasJoinedRoom: true,
+      });
+    }
   }
 
-  createRoom(e) {
-    e.preventDefault();
-    const { roomName } = this.state;
-    console.log('===========create room > roomName', roomName);
-    this.props.joinRoom({ room: roomName });
-    this.props.getRoomList();
-  }
+  // createRoom(e) {
+  //   e.preventDefault();
+  //   const { roomName } = this.state;
+  //   console.log('===========create room > roomName', roomName);
+  //   this.props.joinRoom({ room: roomName });
+  //   this.props.getRoomList();
+  // }
 
   updateRooms(e) {
     e.preventDefault();
@@ -64,8 +75,10 @@ class ViewAllRooms extends React.Component {
   }
 
   render() {
+    const rooms = this.props;
     const roomList = this.props.roomList;
     let { room } = this.props;
+    console.log('viewAllRooms, this.props.roomList', rooms.currentRoom);
     return (
       <div>
         {Object.keys(roomList).length > 0 ? (
@@ -74,25 +87,39 @@ class ViewAllRooms extends React.Component {
           <>Loading roomList</>
         )}
         {
-          <Form>
-            <Form.Group controlId="formRoomName">
-              <Form.Label>Create new room</Form.Label>
-              <Form.Control
-                type="text"
-                name="roomName"
-                value={room}
-                placeholder="Room name"
-                onChange={e => this.onChange(e)}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={e => this.createRoom(e)}
-            >
-              Create room
-            </Button>
-          </Form>
+          <>
+            {rooms.currentRoom !== '' ? (
+              <h3>Current room is {rooms.currentRoom.roomName.room}</h3>
+            ) : (
+              <h3>Please join a room</h3>
+            )}
+            <Form>
+              <Form.Group controlId="formRoomName">
+                <Form.Label>Create new room</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="roomName"
+                  value={room}
+                  placeholder="Room name"
+                  onChange={e => this.onChange(e)}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={e => this.createRoom(e)}
+              >
+                Create room
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={e => this.updateRooms(e)}
+              >
+                Update rooms
+              </Button>
+            </Form>
+          </>
         }
       </div>
     );
@@ -106,7 +133,7 @@ ViewAllRooms.propTypes = {
   key: PropTypes.any,
   lobby: PropTypes.any,
   allRooms: PropTypes.any,
-  currentRoom: PropTypes.string,
+  currentRoom: PropTypes.object,
   room: PropTypes.any,
 };
 

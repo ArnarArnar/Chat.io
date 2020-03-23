@@ -3,6 +3,7 @@ import {
   GET_USER_LIST,
   GET_ROOM_LIST,
   JOIN_ROOM,
+  CREATE_ROOM,
 } from '../constants';
 
 import socketService from '../../services/socketService';
@@ -61,11 +62,39 @@ const getRoomListSuccess = roomList => ({
   payload: roomList,
 });
 
+// TODO
+export const createRoom = roomName => async dispatchEvent => {
+  try {
+    console.log('actions > createRoom: ', roomName);
+    const roomCreatedSuccess = socketService.createRoom(roomName);
+    if (roomCreatedSuccess) {
+      dispatchEvent(createRoomSuccess({ roomName }));
+      return true;
+    }
+    return false;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const createRoomSuccess = roomName => {
+  return {
+    type: CREATE_ROOM,
+    payload: roomName,
+  };
+};
+
 export const joinRoom = roomName => async dispatchEvent => {
   try {
     console.log('actions > joinRoom: ', roomName);
-    const addedUser = socketService.joinRoom(roomName);
-    dispatchEvent(joinRoomSuccess({ addedUser }));
+    const joinedRoomSuccess = await socketService.joinRoom(roomName);
+    if (joinedRoomSuccess) {
+      dispatchEvent(joinRoomSuccess({ roomName }));
+      return true;
+    } else {
+      console.log('Unable to join room', joinRoomSuccess.reason);
+      return false;
+    }
   } catch (err) {
     throw new Error(err);
   }

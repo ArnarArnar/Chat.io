@@ -3,7 +3,21 @@ import connectToSocketIOServer from 'socket.io-client';
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
 
+  // const listenForChanges = async () => {
+  //   console.log('::::Update users::::wwww:');
+  //   return new Promise(resolve => {
+  //     socket.on('updateusers', (room, users, ops) => {
+  //       console.log('::::Update users:::::');
+  //       console.log('room', room);
+  //       console.log('users', users);
+  //       console.log('ops', ops);
+  //       resolve(room, users, ops);
+  //     });
+  //   });
+  // };
+
   const addUser = userName => {
+    console.log('====================socket', socket);
     console.log('socketService > addUser', userName);
     return new Promise(resolve => {
       socket.emit('adduser', userName, function(data) {
@@ -24,6 +38,17 @@ const socketService = () => {
     });
   };
 
+  // const disconnect = () => {
+  //   console.log('socketService > disconnect');
+  //   socket.emit('disconnect', 'arnara17');
+  //   socket.on('updateusers', (room, users, ops) => {
+  //     console.log('::::Update users:::::');
+  //     console.log('room', room);
+  //     console.log('users', users);
+  //     console.log('ops', ops);
+  //   });
+  // };
+
   const getRoomList = async () => {
     console.log('socketService > getRoomList');
     socket.emit('rooms');
@@ -37,8 +62,11 @@ const socketService = () => {
 
   const joinRoom = roomName => {
     console.log('socketService > getUserList');
-    socket.emit('joinroom', roomName, function(data) {
-      return data;
+    return new Promise(resolve => {
+      socket.emit('joinroom', roomName, function(data) {
+        console.log('joinroom', data);
+        resolve(data);
+      });
     });
   };
 
@@ -46,8 +74,10 @@ const socketService = () => {
     socket,
     addUser,
     getUserList,
+    //disconnect,
     getRoomList,
     joinRoom,
+    //listenForChanges,
   };
 };
 

@@ -10,7 +10,7 @@ export default function(state = initialState, action) {
     case GET_ROOM_LIST:
       return { ...state, roomList: { ...action.payload } };
     case JOIN_ROOM:
-      return { ...state, roomList: { ...action.payload } };
+      return { ...state, currentRoom: { ...action.payload } };
     default:
       return state;
   }
