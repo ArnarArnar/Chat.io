@@ -17,6 +17,7 @@ class LogIn extends React.Component {
       userName: '',
       userNameError: null,
       isLoggedIn: false,
+      isLoggedInError: null,
     };
   }
   async componentDidMount() {}
@@ -32,12 +33,18 @@ class LogIn extends React.Component {
     console.log('addUserSuccess', isLoggedIn);
     if (!isLoggedIn) {
       {
-        console.log('Unable to log in, username taken');
+        this.setState(
+          { isLoggedInError: 'Unable to log in, username taken' },
+          () => {
+            console.log(this.state.isLoggedInError);
+          }
+        );
       }
     } else {
       this.setState({
         userName: '',
         isLoggedIn: true,
+        isLoggedInError: null,
       });
     }
   }
@@ -73,7 +80,7 @@ class LogIn extends React.Component {
     return (
       <React.Fragment>
         <Row
-          className="d-flex justify-content-center align-items-center w-100 mt-5"
+          className="justify-content-center align-items-center"
           style={{
             minHeight: '100%',
           }}
@@ -82,7 +89,7 @@ class LogIn extends React.Component {
             {this.state.isLoggedIn !== true ? (
               <>
                 <Form>
-                  <Form.Group controlId="formUsername">
+                  <Form.Group controlId="form-user-name">
                     <Form.Label>Create a username</Form.Label>
                     <Form.Control
                       required
@@ -100,8 +107,17 @@ class LogIn extends React.Component {
                         {this.state.userNameError}
                       </Form.Control.Feedback>
                     )}
+                    {this.state.isLoggedIn !== null && (
+                      <Form.Control.Feedback
+                        style={{ display: 'block' }}
+                        type="invalid"
+                      >
+                        {this.state.isLoggedInError}
+                      </Form.Control.Feedback>
+                    )}
                   </Form.Group>
                   <Button
+                    className="btn-block"
                     variant="primary"
                     type="submit"
                     onClick={e => this.logIn(e)}
@@ -109,18 +125,26 @@ class LogIn extends React.Component {
                     Submit
                   </Button>
                 </Form>
-                <ViewAllRooms />
               </>
             ) : (
               <>
-                <div>Logged in as: {this.props.userName}</div>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={e => this.signOut(e)}
-                >
-                  Sign Out
-                </Button>{' '}
+                <Row>
+                  <Col>
+                    <div>Logged in as: {this.props.userName}</div>
+                  </Col>
+                  <Col>
+                    <>
+                      <Button
+                        className="float-right"
+                        variant="primary"
+                        type="submit"
+                        onClick={e => this.signOut(e)}
+                      >
+                        Sign Out
+                      </Button>{' '}
+                    </>
+                  </Col>
+                </Row>
                 <ViewAllRooms />
               </>
             )}
