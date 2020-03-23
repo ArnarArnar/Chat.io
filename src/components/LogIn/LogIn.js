@@ -8,6 +8,7 @@ import ViewAllRooms from '../ViewAllRooms/ViewAllRooms';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Navbar from 'react-bootstrap/Navbar';
 //import Spinner from 'react-bootstrap/Spinner';
 
 class LogIn extends React.Component {
@@ -128,23 +129,21 @@ class LogIn extends React.Component {
               </>
             ) : (
               <>
-                <Row>
-                  <Col>
-                    <div>Logged in as: {this.props.userName}</div>
-                  </Col>
-                  <Col>
-                    <>
-                      <Button
-                        className="float-right"
-                        variant="primary"
-                        type="submit"
-                        onClick={e => this.signOut(e)}
-                      >
-                        Sign Out
-                      </Button>{' '}
-                    </>
-                  </Col>
-                </Row>
+                <Navbar bg="dark" variant="dark">
+                  <Navbar.Brand>Chat.io</Navbar.Brand>
+                  <Navbar.Text>Logged in as: {this.props.userName}</Navbar.Text>
+                  <Navbar.Collapse className="justify-content-end">
+                    <Button
+                      className="justify-content-end"
+                      variant="outline-light"
+                      type="submit"
+                      onClick={e => this.signOut(e)}
+                    >
+                      Sign Out
+                    </Button>{' '}
+                  </Navbar.Collapse>
+                </Navbar>
+                <br />
                 <ViewAllRooms />
               </>
             )}
