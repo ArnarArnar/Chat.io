@@ -2,6 +2,7 @@ import createUserReducer from './createUserReducer';
 import getUserListReducer from './getUserListReducer';
 import getRoomListReducer from './roomReducers';
 import joinRoomReducer from './roomReducers';
+import messageReducers from './messageReducers';
 
 import { combineReducers } from 'redux';
 
@@ -10,4 +11,5 @@ export default combineReducers({
   userList: getUserListReducer,
   rooms: getRoomListReducer,
   joinRoom: joinRoomReducer,
+  messages: messageReducers,
 });

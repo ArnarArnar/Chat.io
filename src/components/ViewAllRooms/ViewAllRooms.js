@@ -54,13 +54,18 @@ class ViewAllRooms extends React.Component {
   }
 
   RoomsAvailable(roomList) {
+    console.log(this.props);
     return (
       <Card>
         <Card.Header as="h5">Available Rooms</Card.Header>
         <ListGroup>
-          {Object.entries(roomList).map(l => {
+          {Object.entries(roomList).map((l) => {
             return (
-              <ListGroup.Item action onClick={e => this.joinRoom(e)} key={l[0]}>
+              <ListGroup.Item
+                action
+                onClick={(e) => this.joinRoom(e)}
+                key={l[0]}
+              >
                 {l[0]}
               </ListGroup.Item>
             );
@@ -112,13 +117,13 @@ class ViewAllRooms extends React.Component {
                       name="roomName"
                       value={room}
                       placeholder="Room name"
-                      onChange={e => this.onChange(e)}
+                      onChange={(e) => this.onChange(e)}
                     />
                   </Form.Group>
                   <Button
                     variant="primary"
                     type="submit"
-                    onClick={e => this.createRoom(e)}
+                    onClick={(e) => this.createRoom(e)}
                   >
                     Create room
                   </Button>
@@ -126,7 +131,7 @@ class ViewAllRooms extends React.Component {
                     className="float-right"
                     variant="secondary"
                     type="submit"
-                    onClick={e => this.updateRooms(e)}
+                    onClick={(e) => this.updateRooms(e)}
                   >
                     Update rooms
                   </Button>
@@ -151,7 +156,7 @@ ViewAllRooms.propTypes = {
   room: PropTypes.any,
 };
 
-const mapStateToProps = reduxStoreState => {
+const mapStateToProps = (reduxStoreState) => {
   return {
     currentRoom: reduxStoreState.rooms.currentRoom,
     roomList: reduxStoreState.rooms.roomList,

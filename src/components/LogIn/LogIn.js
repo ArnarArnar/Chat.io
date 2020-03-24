@@ -97,7 +97,7 @@ class LogIn extends React.Component {
                       name="userName"
                       value={userName}
                       placeholder="Choose a username"
-                      onChange={e => this.onChange(e)}
+                      onChange={(e) => this.onChange(e)}
                     />
                     {this.state.userNameError !== null && (
                       <Form.Control.Feedback
@@ -120,7 +120,7 @@ class LogIn extends React.Component {
                     className="btn-block"
                     variant="primary"
                     type="submit"
-                    onClick={e => this.logIn(e)}
+                    onClick={(e) => this.logIn(e)}
                   >
                     Submit
                   </Button>
@@ -136,7 +136,7 @@ class LogIn extends React.Component {
                       className="justify-content-end"
                       variant="outline-light"
                       type="submit"
-                      onClick={e => this.signOut(e)}
+                      onClick={(e) => this.signOut(e)}
                     >
                       Sign Out
                     </Button>{' '}
@@ -157,7 +157,7 @@ LogIn.propTypes = {
   userName: PropTypes.string,
   addUser: PropTypes.func,
 };
-const mapStateToProps = reduxStoreState => {
+const mapStateToProps = (reduxStoreState) => {
   return {
     userName: reduxStoreState.user.userName,
   };

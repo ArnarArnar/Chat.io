@@ -5,7 +5,7 @@ const initialState = {
   roomList: {},
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_ROOM_LIST:
       return { ...state, roomList: { ...action.payload } };

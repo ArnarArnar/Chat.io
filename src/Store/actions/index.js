@@ -4,12 +4,12 @@ import {
   GET_ROOM_LIST,
   JOIN_ROOM,
   CREATE_ROOM,
-  GET_MESSAGES,
+  SET_MESSAGES,
 } from '../constants';
 
 import socketService from '../../services/socketService';
 
-export const addUser = userName => async dispatchEvent => {
+export const addUser = (userName) => async (dispatchEvent) => {
   try {
     //console.log('actions > addUser: ', userName);
     const successfullyAddedUser = await socketService.addUser(userName);
@@ -24,14 +24,14 @@ export const addUser = userName => async dispatchEvent => {
   }
 };
 
-const addUserSuccess = userName => {
+const addUserSuccess = (userName) => {
   return {
     type: CREATE_USER,
     payload: userName,
   };
 };
 
-export const getUserList = () => async dispatchEvent => {
+export const getUserList = () => async (dispatchEvent) => {
   try {
     //console.log('actions > getUserList: before');
     const allUsers = await socketService.getUserList();
@@ -42,12 +42,12 @@ export const getUserList = () => async dispatchEvent => {
   }
 };
 
-const getUserListSuccess = userList => ({
+const getUserListSuccess = (userList) => ({
   type: GET_USER_LIST,
   payload: userList,
 });
 
-export const getRoomList = () => async dispatchEvent => {
+export const getRoomList = () => async (dispatchEvent) => {
   try {
     //console.log('actions > getRoomList');
     const allRooms = await socketService.getRoomList();
@@ -58,13 +58,13 @@ export const getRoomList = () => async dispatchEvent => {
   }
 };
 
-const getRoomListSuccess = roomList => ({
+const getRoomListSuccess = (roomList) => ({
   type: GET_ROOM_LIST,
   payload: roomList,
 });
 
 // TODO
-export const createRoom = roomName => async dispatchEvent => {
+export const createRoom = (roomName) => async (dispatchEvent) => {
   try {
     //console.log('actions > createRoom: ', roomName);
     const roomCreatedSuccess = socketService.createRoom(roomName);
@@ -78,14 +78,14 @@ export const createRoom = roomName => async dispatchEvent => {
   }
 };
 
-const createRoomSuccess = roomName => {
+const createRoomSuccess = (roomName) => {
   return {
     type: CREATE_ROOM,
     payload: roomName,
   };
 };
 
-export const joinRoom = roomName => async dispatchEvent => {
+export const joinRoom = (roomName) => async (dispatchEvent) => {
   try {
     //console.log('actions > joinRoom: ', roomName);
     const joinedRoomSuccess = await socketService.joinRoom(roomName);
@@ -101,28 +101,19 @@ export const joinRoom = roomName => async dispatchEvent => {
   }
 };
 
-const joinRoomSuccess = roomName => {
+const joinRoomSuccess = (roomName) => {
   return {
     type: JOIN_ROOM,
     payload: roomName,
   };
 };
 
-export const getMessages = message => async dispatchEvent => {
-  try {
-    console.log('actions > getMessages: before');
-    const response = await socketService.getUserList();
-    console.log('actions > getMessages: after', response);
-    dispatchEvent(getMessagesSuccess(message));
-  } catch (err) {
-    throw new Error(err);
-  }
+export const setMessages = (data) => {
+  return {
+    type: SET_MESSAGES,
+    payload: data,
+  };
 };
-
-const getMessagesSuccess = message => ({
-  type: GET_MESSAGES,
-  payload: message,
-});
 
 // import {
 //   GET_BOSSES,

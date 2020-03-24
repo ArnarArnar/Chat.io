@@ -15,10 +15,12 @@ class ChatWindow extends React.Component {
   componentDidMount() {
     //console.log("ChatWindow > componentDidMount");
     socketService.socket.on('updatechat', (roomName, data) => {
-      this.props.setMessages(roomName, data);
+      if (roomName == this.props.thisRoom.roomName.room) {
+        this.props.setMessages(data);
+      }
       console.log('ChatWindow > updatechat. data.roomName', roomName, data);
-      //const { messages } = this.state;
-      this.setState({ messages: [data] });
+      // this.setState({ messages: [data] });
+      console.log('ChatWindow > updatechat', this.props);
     });
   }
 
@@ -70,8 +72,8 @@ class ChatWindow extends React.Component {
             <Container>
               <ul className="list-group" style={{ marginBottom: '60px' }}>
                 {this.state.messages.length > 0 ? (
-                  this.state.messages.map(msg =>
-                    msg.map(m => (
+                  this.state.messages.map((msg) =>
+                    msg.map((m) => (
                       <li className="list-group-item" key={m.timestamp}>
                         <strong>{m.nick}</strong>
                         <p>{m.timestamp}</p>
@@ -96,7 +98,7 @@ class ChatWindow extends React.Component {
                 inline
                 variant="bottom"
                 className="w-100 d-flex justify-content-between align-items-center fixed-bottom"
-                onSubmit={e => this.sendMessage(e)}
+                onSubmit={(e) => this.sendMessage(e)}
               >
                 <Form.Group style={{ flex: 1 }}>
                   <Form.Control
@@ -106,7 +108,7 @@ class ChatWindow extends React.Component {
                     value={this.state.message}
                     style={{ width: '100%' }}
                     placeholder="Type Message here..."
-                    onChange={e => this.onChange(e)}
+                    onChange={(e) => this.onChange(e)}
                   />
                 </Form.Group>
                 <Button variant="primary" type="submit">
@@ -133,11 +135,13 @@ ChatWindow.propTypes = {
   room: PropTypes.any,
   thisRoom: PropTypes.object,
   setMessages: PropTypes.func,
+  messages: PropTypes.array,
 };
 
-const mapStateToProps = reduxStoreState => {
+const mapStateToProps = (reduxStoreState) => {
   return {
     thisRoom: reduxStoreState.rooms.currentRoom,
+    messages: reduxStoreState.messages,
   };
 };
 

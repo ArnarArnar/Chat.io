@@ -18,7 +18,7 @@ class ViewAllUsers extends React.Component {
   }
 
   userListItems(userList) {
-    return userList.map(userList => <li key={userList}>{userList}</li>);
+    return userList.map((userList) => <li key={userList}>{userList}</li>);
   }
 
   render() {
@@ -28,10 +28,14 @@ class ViewAllUsers extends React.Component {
     }
     return (
       <>
-        <Button variant="info" type="submit" onClick={e => this.getUsers(e)}>
+        <Button variant="info" type="submit" onClick={(e) => this.getUsers(e)}>
           Get User List
         </Button>
-        <Button variant="info" type="submit" onClick={e => this.checkProps(e)}>
+        <Button
+          variant="info"
+          type="submit"
+          onClick={(e) => this.checkProps(e)}
+        >
           Check props
         </Button>
         <ol>{this.userListItems(userList)}</ol>
@@ -46,7 +50,7 @@ ViewAllUsers.propTypes = {
   key: PropTypes.any,
 };
 
-const mapStateToProps = reduxStoreState => {
+const mapStateToProps = (reduxStoreState) => {
   return {
     userList: reduxStoreState.userList,
   };
