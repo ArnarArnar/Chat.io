@@ -1,20 +1,17 @@
 import connectToSocketIOServer from 'socket.io-client';
+import { store } from '../index';
+import { updateRoomInfo } from '../Store/actions';
 
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
 
-  // const listenForChanges = async () => {
-  //   console.log('::::Update users::::wwww:');
-  //   return new Promise(resolve => {
-  //     socket.on('updateusers', (room, users, ops) => {
-  //       console.log('::::Update users:::::');
-  //       console.log('room', room);
-  //       console.log('users', users);
-  //       console.log('ops', ops);
-  //       resolve(room, users, ops);
-  //     });
-  //   });
-  // };
+  socket.on('updateusers', (room, users, ops) => {
+    console.log('::::Update users:::::');
+    console.log('room', room);
+    console.log('users', users);
+    console.log('ops', ops);
+    store.dispatch(updateRoomInfo(room, users, ops));
+  });
 
   const addUser = (userName) => {
     console.log('====================socket', socket);
@@ -69,6 +66,10 @@ const socketService = () => {
       });
     });
   };
+  const leaveRoom = (roomName) => {
+    console.log('socketService > leaveRoom');
+    socket.emit('partroom', roomName);
+  };
 
   return {
     socket,
@@ -78,6 +79,7 @@ const socketService = () => {
     getRoomList,
     joinRoom,
     //listenForChanges,
+    leaveRoom,
   };
 };
 

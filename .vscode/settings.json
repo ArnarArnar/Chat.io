@@ -4,6 +4,7 @@
         "roomlist",
         "sendmsg",
         "updatechat",
+        "updateusers",
         "userlist"
     ]
 }

@@ -2,11 +2,15 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { getRoomList, joinRoom } from '../../Store/actions';
+import socketService from '../../services/socketService';
 
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
+//import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 import PropTypes from 'prop-types';
 
@@ -15,6 +19,8 @@ class ViewAllRooms extends React.Component {
     super(props);
     this.state = {
       hasJoinedRoom: false,
+      roomName: '',
+      roomNameError: null,
     };
   }
 
@@ -25,34 +31,31 @@ class ViewAllRooms extends React.Component {
   async joinRoom(e) {
     e.preventDefault(e);
     //console.log('ViewAllRooms > joinRoom > e', e.target.innerText);
-    const hasJoinedRoom = await this.props.joinRoom({
+    this.props.joinRoom({
       room: e.target.innerText,
     });
-    //console.log('JoinedRoom CB', hasJoinedRoom);
-    if (!hasJoinedRoom) {
-      {
-        console.log('Unable to join room');
-      }
-    } else {
-      this.setState({
-        hasJoinedRoom: true,
-      });
-    }
   }
 
-  // createRoom(e) {
-  //   e.preventDefault();
-  //   const { roomName } = this.state;
-  //   console.log('===========create room > roomName', roomName);
-  //   this.props.joinRoom({ room: roomName });
-  //   this.props.getRoomList();
-  // }
+  async createRoom(e) {
+    e.preventDefault();
+    const { roomName } = this.state;
+    this.props.joinRoom({
+      room: roomName,
+    });
+
+    this.props.getRoomList();
+  }
 
   updateRooms(e) {
     e.preventDefault();
     this.props.getRoomList();
   }
 
+  leaveRoom(e) {
+    e.preventDefault();
+    console.log('leave room', this.props.currentRoom.roomName.room);
+    socketService.leaveRoom(this.props.currentRoom.roomName.room);
+  }
   RoomsAvailable(roomList) {
     console.log(this.props);
     return (
@@ -76,19 +79,63 @@ class ViewAllRooms extends React.Component {
   }
 
   onChange(e) {
+    console.log('this.props', this.props.roomList);
+    if (e.target.name === 'roomName') {
+      const roomName = e.target.value;
+      if (roomName.indexOf(' ') > 0) {
+        this.setState({ roomNameError: 'Room name cannot spaces' }, () => {
+          console.log(this.state.roomNameError);
+        });
+      } else if (!roomName.replace(/\s/g, '').length) {
+        this.setState(
+          { userNameError: 'The room name cannot only contain whitespace' },
+          () => {
+            console.log(this.state.roomNameError);
+          }
+        );
+      } else if (
+        Object.prototype.hasOwnProperty.call(this.props.roomList, roomName)
+      ) {
+        this.setState(
+          {
+            roomNameError:
+              'A room already has this name, please select another one',
+          },
+          () => {
+            console.log(this.state.roomNameError);
+          }
+        );
+      } else {
+        this.setState({ roomNameError: null });
+      }
+    }
     this.setState({ [e.target.name]: e.target.value });
   }
 
   render() {
     const rooms = this.props;
     const roomList = this.props.roomList;
-    let { room } = this.props;
+    const roomName = this.state.roomName;
     console.log('rooms', rooms);
     console.log('viewAllRooms, this.props.roomList', rooms.currentRoom);
     return (
-      <>
+      <Card>
         {rooms.currentRoom.roomName.room !== '' ? (
-          <h5>Current room is {rooms.currentRoom.roomName.room}</h5>
+          <Card.Header as="h5">
+            <Row>
+              <Col>Current room is {rooms.currentRoom.roomName.room}</Col>
+              <Col>
+                <Button
+                  className="float-right"
+                  variant="secondary"
+                  type="submit"
+                  onClick={(e) => this.leaveRoom(e)}
+                >
+                  Back to lobby
+                </Button>
+              </Col>
+            </Row>
+          </Card.Header>
         ) : (
           <>
             {Object.keys(roomList).length > 0 ? (
@@ -113,12 +160,21 @@ class ViewAllRooms extends React.Component {
                   <Form.Group controlId="form-room-name">
                     <Form.Label>Create new room</Form.Label>
                     <Form.Control
+                      required
                       type="text"
                       name="roomName"
-                      value={room}
-                      placeholder="Room name"
+                      value={roomName}
+                      placeholder="Enter a name for a new chat room"
                       onChange={(e) => this.onChange(e)}
                     />
+                    {this.state.roomNameError !== null && (
+                      <Form.Control.Feedback
+                        style={{ display: 'block' }}
+                        type="invalid"
+                      >
+                        {this.state.roomNameError}
+                      </Form.Control.Feedback>
+                    )}
                   </Form.Group>
                   <Button
                     variant="primary"
@@ -140,7 +196,7 @@ class ViewAllRooms extends React.Component {
             }
           </>
         )}
-      </>
+      </Card>
     );
   }
 }
@@ -153,7 +209,8 @@ ViewAllRooms.propTypes = {
   lobby: PropTypes.any,
   allRooms: PropTypes.any,
   currentRoom: PropTypes.object,
-  room: PropTypes.any,
+  rooms: PropTypes.any,
+  leaveRoom: PropTypes.func,
 };
 
 const mapStateToProps = (reduxStoreState) => {

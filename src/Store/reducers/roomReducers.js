@@ -1,4 +1,4 @@
-import { GET_ROOM_LIST, JOIN_ROOM } from '../constants';
+import { GET_ROOM_LIST, JOIN_ROOM, UPDATE_ROOM_INFO } from '../constants';
 
 const initialState = {
   currentRoom: { roomName: { room: '' } },
@@ -10,6 +10,8 @@ export default function (state = initialState, action) {
     case GET_ROOM_LIST:
       return { ...state, roomList: { ...action.payload } };
     case JOIN_ROOM:
+      return { ...state, currentRoom: { ...action.payload } };
+    case UPDATE_ROOM_INFO:
       return { ...state, currentRoom: { ...action.payload } };
     default:
       return state;

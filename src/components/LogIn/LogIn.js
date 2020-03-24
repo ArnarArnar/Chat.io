@@ -76,7 +76,7 @@ class LogIn extends React.Component {
 
   render() {
     let { userName } = this.state;
-
+    console.log('Login > this.props', this.props);
     return (
       <React.Fragment>
         <Row

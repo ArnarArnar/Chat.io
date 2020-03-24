@@ -4,6 +4,7 @@ import {
   GET_ROOM_LIST,
   JOIN_ROOM,
   CREATE_ROOM,
+  UPDATE_ROOM_INFO,
   SET_MESSAGES,
 } from '../constants';
 
@@ -46,6 +47,13 @@ const getUserListSuccess = (userList) => ({
   type: GET_USER_LIST,
   payload: userList,
 });
+
+export const updateRoomInfo = (room) => {
+  return {
+    type: UPDATE_ROOM_INFO,
+    payload: { roomName: { room: room } },
+  };
+};
 
 export const getRoomList = () => async (dispatchEvent) => {
   try {
@@ -107,6 +115,13 @@ const joinRoomSuccess = (roomName) => {
     payload: roomName,
   };
 };
+
+// const leaveRoom = (roomName) => {
+//   return {
+//     type: JOIN_ROOM,
+//     payload: roomName,
+//   };
+// };
 
 export const setMessages = (data) => {
   return {

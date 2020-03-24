@@ -12,7 +12,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(allReducers, enhancer);
+export const store = createStore(allReducers, enhancer);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,4 +20,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
 // ReactDOM.render(<App />, document.getElementById('root'));

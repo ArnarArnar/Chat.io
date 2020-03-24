@@ -19,8 +19,8 @@ class ChatWindow extends React.Component {
         this.props.setMessages(data);
       }
       console.log('ChatWindow > updatechat. data.roomName', roomName, data);
-      // this.setState({ messages: [data] });
-      console.log('ChatWindow > updatechat', this.props);
+      this.setState({ messages: [data] });
+      console.log('ChatWindow > updatechat', this.props.messages);
     });
   }
 
@@ -71,16 +71,14 @@ class ChatWindow extends React.Component {
           <Col>
             <Container>
               <ul className="list-group" style={{ marginBottom: '60px' }}>
-                {this.state.messages.length > 0 ? (
-                  this.state.messages.map((msg) =>
-                    msg.map((m) => (
-                      <li className="list-group-item" key={m.timestamp}>
-                        <strong>{m.nick}</strong>
-                        <p>{m.timestamp}</p>
-                        <p>{m.message}</p>{' '}
-                      </li>
-                    ))
-                  )
+                {this.props.messages.length > 0 ? (
+                  this.props.messages.map((m) => (
+                    <li className="list-group-item" key={m.timestamp}>
+                      <strong>{m.nick}</strong>
+                      <p>{m.timestamp}</p>
+                      <p>{m.message}</p>{' '}
+                    </li>
+                  ))
                 ) : (
                   <div className="d-flex justify-content-center">
                     <Spinner
