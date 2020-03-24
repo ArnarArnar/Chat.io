@@ -21,6 +21,7 @@ class ViewAllRooms extends React.Component {
   async componentDidMount() {
     await this.props.getRoomList();
   }
+
   async joinRoom(e) {
     e.preventDefault(e);
     //console.log('ViewAllRooms > joinRoom > e', e.target.innerText);

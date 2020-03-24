@@ -4,15 +4,16 @@ import {
   GET_ROOM_LIST,
   JOIN_ROOM,
   CREATE_ROOM,
+  GET_MESSAGES,
 } from '../constants';
 
 import socketService from '../../services/socketService';
 
 export const addUser = userName => async dispatchEvent => {
   try {
-    console.log('actions > addUser: ', userName);
+    //console.log('actions > addUser: ', userName);
     const successfullyAddedUser = await socketService.addUser(userName);
-    console.log('Successfull add', successfullyAddedUser);
+    //console.log('Successfull add', successfullyAddedUser);
     if (successfullyAddedUser) {
       dispatchEvent(addUserSuccess({ userName }));
       return true;
@@ -32,9 +33,9 @@ const addUserSuccess = userName => {
 
 export const getUserList = () => async dispatchEvent => {
   try {
-    console.log('actions > getUserList: before');
+    //console.log('actions > getUserList: before');
     const allUsers = await socketService.getUserList();
-    console.log('actions > getUserList: after', allUsers);
+    //console.log('actions > getUserList: after', allUsers);
     dispatchEvent(getUserListSuccess(allUsers));
   } catch (err) {
     throw new Error(err);
@@ -48,9 +49,9 @@ const getUserListSuccess = userList => ({
 
 export const getRoomList = () => async dispatchEvent => {
   try {
-    console.log('actions > getRoomList');
+    //console.log('actions > getRoomList');
     const allRooms = await socketService.getRoomList();
-    console.log('actions > getRoomList: ', allRooms);
+    // console.log('actions > getRoomList: ', allRooms);
     dispatchEvent(getRoomListSuccess(allRooms));
   } catch (err) {
     throw new Error(err);
@@ -65,7 +66,7 @@ const getRoomListSuccess = roomList => ({
 // TODO
 export const createRoom = roomName => async dispatchEvent => {
   try {
-    console.log('actions > createRoom: ', roomName);
+    //console.log('actions > createRoom: ', roomName);
     const roomCreatedSuccess = socketService.createRoom(roomName);
     if (roomCreatedSuccess) {
       dispatchEvent(createRoomSuccess({ roomName }));
@@ -86,13 +87,13 @@ const createRoomSuccess = roomName => {
 
 export const joinRoom = roomName => async dispatchEvent => {
   try {
-    console.log('actions > joinRoom: ', roomName);
+    //console.log('actions > joinRoom: ', roomName);
     const joinedRoomSuccess = await socketService.joinRoom(roomName);
     if (joinedRoomSuccess) {
       dispatchEvent(joinRoomSuccess({ roomName }));
       return true;
     } else {
-      console.log('Unable to join room', joinRoomSuccess.reason);
+      //console.log('Unable to join room', joinRoomSuccess.reason);
       return false;
     }
   } catch (err) {
@@ -106,6 +107,22 @@ const joinRoomSuccess = roomName => {
     payload: roomName,
   };
 };
+
+export const getMessages = message => async dispatchEvent => {
+  try {
+    console.log('actions > getMessages: before');
+    const response = await socketService.getUserList();
+    console.log('actions > getMessages: after', response);
+    dispatchEvent(getMessagesSuccess(message));
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const getMessagesSuccess = message => ({
+  type: GET_MESSAGES,
+  payload: message,
+});
 
 // import {
 //   GET_BOSSES,

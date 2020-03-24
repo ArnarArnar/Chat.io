@@ -10,6 +10,10 @@ module.exports = {
     filename: 'bundle.js',
   },
   devServer: {
+    open: true,
+    compress: true,
+    historyApiFallback: true,
+    port: 9000,
     contentBase: './dist',
   },
   module: {

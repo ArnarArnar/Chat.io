@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import socketService from '../../services/socketService';
 import { connect } from 'react-redux';
+import { setMessages } from '../../Store/actions';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,6 +15,7 @@ class ChatWindow extends React.Component {
   componentDidMount() {
     //console.log("ChatWindow > componentDidMount");
     socketService.socket.on('updatechat', (roomName, data) => {
+      this.props.setMessages(roomName, data);
       console.log('ChatWindow > updatechat. data.roomName', roomName, data);
       //const { messages } = this.state;
       this.setState({ messages: [data] });
@@ -130,6 +132,7 @@ ChatWindow.propTypes = {
   currentRoom: PropTypes.object,
   room: PropTypes.any,
   thisRoom: PropTypes.object,
+  setMessages: PropTypes.func,
 };
 
 const mapStateToProps = reduxStoreState => {
@@ -138,7 +141,9 @@ const mapStateToProps = reduxStoreState => {
   };
 };
 
-export default connect(mapStateToProps, { socketService })(ChatWindow);
+export default connect(mapStateToProps, { socketService, setMessages })(
+  ChatWindow
+);
 
 // ChatWindow.propTypes = {
 //   users: PropTypes.object,
