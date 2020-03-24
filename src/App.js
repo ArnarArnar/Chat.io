@@ -6,7 +6,7 @@ import LogIn from './components/LogIn/LogIn.js';
 import SocketContext from './context/SocketContext';
 
 import ViewAllUsers from './components/ViewAllUsers/ViewAllUsers';
-//import ChatWindow from './components/ChatWindow/ChatWindow';
+import ChatWindow from './components/ChatWindow/ChatWindow';
 class App extends React.Component {
   componentDidMount() {}
 
@@ -24,6 +24,10 @@ class App extends React.Component {
     return (
       <div className="container">
         <LogIn />
+        <ChatWindow />
+        <br />
+        <br />
+        <br />
         <ViewAllUsers />
       </div>
     );

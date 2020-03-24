@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
-//import Spinner from 'react-bootstrap/Spinner';
 
 class LogIn extends React.Component {
   constructor(props) {
@@ -91,7 +90,7 @@ class LogIn extends React.Component {
               <>
                 <Form>
                   <Form.Group controlId="form-user-name">
-                    <Form.Label>Create a username</Form.Label>
+                    <Form.Label as="h5">Create a username</Form.Label>
                     <Form.Control
                       required
                       type="text"

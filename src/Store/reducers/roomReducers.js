@@ -1,7 +1,7 @@
 import { GET_ROOM_LIST, JOIN_ROOM } from '../constants';
 
 const initialState = {
-  currentRoom: '',
+  currentRoom: { roomName: { room: '' } },
   roomList: {},
 };
 
