@@ -2,9 +2,11 @@ import {
   CREATE_USER,
   GET_USER_LIST,
   GET_ROOM_LIST,
-  JOIN_ROOM,
+  //JOIN_ROOM,
+  USER_CURRENT_ROOM,
   CREATE_ROOM,
   UPDATE_ROOM_INFO,
+  UPDATE_CHAT,
   SET_MESSAGES,
 } from '../constants';
 
@@ -14,9 +16,9 @@ export const addUser = (userName) => async (dispatchEvent) => {
   try {
     //console.log('actions > addUser: ', userName);
     const successfullyAddedUser = await socketService.addUser(userName);
-    //console.log('Successfull add', successfullyAddedUser);
+    //console.log('Successful add', successfullyAddedUser);
     if (successfullyAddedUser) {
-      dispatchEvent(addUserSuccess({ userName }));
+      dispatchEvent(addUserSuccess(userName));
       return true;
     }
     return false;
@@ -48,10 +50,34 @@ const getUserListSuccess = (userList) => ({
   payload: userList,
 });
 
-export const updateRoomInfo = (room) => {
+export const updateRoomInfo = (room, users, ops) => {
   return {
     type: UPDATE_ROOM_INFO,
-    payload: { roomName: { room: room } },
+    payload: {
+      room: room,
+      users: users,
+      ops: ops,
+    },
+  };
+};
+
+export const userJoinsRoom = (room, user) => {
+  return {
+    type: USER_CURRENT_ROOM,
+    payload: {
+      room,
+      user,
+    },
+  };
+};
+
+export const updatechat = (name, messageHistory) => {
+  return {
+    type: UPDATE_CHAT,
+    payload: {
+      name,
+      messageHistory,
+    },
   };
 };
 
@@ -93,12 +119,12 @@ const createRoomSuccess = (roomName) => {
   };
 };
 
-export const joinRoom = (roomName) => async (dispatchEvent) => {
+export const joinRoom = (roomName) => async () => {
   try {
     //console.log('actions > joinRoom: ', roomName);
     const joinedRoomSuccess = await socketService.joinRoom(roomName);
     if (joinedRoomSuccess) {
-      dispatchEvent(joinRoomSuccess({ roomName }));
+      // dispatchEvent(joinRoomSuccess({ roomName }));
       return true;
     } else {
       //console.log('Unable to join room', joinRoomSuccess.reason);
@@ -109,12 +135,12 @@ export const joinRoom = (roomName) => async (dispatchEvent) => {
   }
 };
 
-const joinRoomSuccess = (roomName) => {
-  return {
-    type: JOIN_ROOM,
-    payload: roomName,
-  };
-};
+// const joinRoomSuccess = (roomName) => {
+//   return {
+//     type: JOIN_ROOM,
+//     payload: roomName,
+//   };
+// };
 
 // const leaveRoom = (roomName) => {
 //   return {

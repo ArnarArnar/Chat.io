@@ -20,17 +20,12 @@ class LogIn extends React.Component {
       isLoggedInError: null,
     };
   }
-  async componentDidMount() {}
-
-  async addUser(username) {
-    return await this.props.addUser(username);
-  }
 
   async logIn(e) {
     e.preventDefault();
     const { userName } = this.state;
-    const isLoggedIn = await this.addUser(userName);
-    console.log('addUserSuccess', isLoggedIn);
+    const isLoggedIn = await await this.props.addUser(userName);
+    // console.log('addUserSuccess', isLoggedIn);
     if (!isLoggedIn) {
       {
         this.setState(
@@ -76,7 +71,7 @@ class LogIn extends React.Component {
 
   render() {
     let { userName } = this.state;
-    console.log('Login > this.props', this.props);
+    //console.log('Login > this.props', this.props);
     return (
       <React.Fragment>
         <Row
@@ -130,7 +125,9 @@ class LogIn extends React.Component {
               <>
                 <Navbar bg="dark" variant="dark">
                   <Navbar.Brand>Chat.io</Navbar.Brand>
-                  <Navbar.Text>Logged in as: {this.props.userName}</Navbar.Text>
+                  <Navbar.Text>
+                    Logged in as: {this.props.user.user}
+                  </Navbar.Text>
                   <Navbar.Collapse className="justify-content-end">
                     <Button
                       className="justify-content-end"
@@ -156,10 +153,12 @@ class LogIn extends React.Component {
 LogIn.propTypes = {
   userName: PropTypes.string,
   addUser: PropTypes.func,
+  user: PropTypes.any,
 };
 const mapStateToProps = (reduxStoreState) => {
   return {
-    userName: reduxStoreState.user.userName,
+    //userName: reduxStoreState.user.userName,
+    user: reduxStoreState.user,
   };
 };
 

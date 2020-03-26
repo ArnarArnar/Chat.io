@@ -3,6 +3,7 @@
         "joinroom",
         "roomlist",
         "sendmsg",
+        "servermessage",
         "updatechat",
         "updateusers",
         "userlist"

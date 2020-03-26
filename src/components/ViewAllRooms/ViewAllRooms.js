@@ -6,7 +6,7 @@ import socketService from '../../services/socketService';
 
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
-import Spinner from 'react-bootstrap/Spinner';
+//import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 //import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -28,6 +28,8 @@ class ViewAllRooms extends React.Component {
     await this.props.getRoomList();
   }
 
+  // ## this is a comment
+
   async joinRoom(e) {
     e.preventDefault(e);
     //console.log('ViewAllRooms > joinRoom > e', e.target.innerText);
@@ -42,13 +44,9 @@ class ViewAllRooms extends React.Component {
     this.props.joinRoom({
       room: roomName,
     });
+    this.setState({ roomName: '' });
 
-    this.props.getRoomList();
-  }
-
-  updateRooms(e) {
-    e.preventDefault();
-    this.props.getRoomList();
+    // this.props.getRoomList();
   }
 
   leaveRoom(e) {
@@ -56,13 +54,14 @@ class ViewAllRooms extends React.Component {
     console.log('leave room', this.props.currentRoom.roomName.room);
     socketService.leaveRoom(this.props.currentRoom.roomName.room);
   }
-  RoomsAvailable(roomList) {
-    console.log(this.props);
+  RoomsAvailable() {
+    const { rooms } = this.props;
+    //console.log('Rooms available ', rooms);
     return (
       <Card>
         <Card.Header as="h5">Available Rooms</Card.Header>
         <ListGroup>
-          {Object.entries(roomList).map((l) => {
+          {Object.entries(rooms).map((l) => {
             return (
               <ListGroup.Item
                 action
@@ -79,7 +78,8 @@ class ViewAllRooms extends React.Component {
   }
 
   onChange(e) {
-    console.log('this.props', this.props.roomList);
+    const { rooms } = this.props;
+    //console.log('onChange > this.props', rooms);
     if (e.target.name === 'roomName') {
       const roomName = e.target.value;
       if (roomName.indexOf(' ') > 0) {
@@ -93,9 +93,7 @@ class ViewAllRooms extends React.Component {
             console.log(this.state.roomNameError);
           }
         );
-      } else if (
-        Object.prototype.hasOwnProperty.call(this.props.roomList, roomName)
-      ) {
+      } else if (Object.prototype.hasOwnProperty.call(rooms, roomName)) {
         this.setState(
           {
             roomNameError:
@@ -113,17 +111,17 @@ class ViewAllRooms extends React.Component {
   }
 
   render() {
-    const rooms = this.props;
-    const roomList = this.props.roomList;
-    const roomName = this.state.roomName;
-    console.log('rooms', rooms);
-    console.log('viewAllRooms, this.props.roomList', rooms.currentRoom);
+    //const rooms = this.props.rooms;
+    const { room } = this.props.user;
+    const roomName = this.state.user;
+    //console.log('ViewAllRooms > this.props.rooms', rooms);
+    //console.log('ViewAllRooms > this.state.roomName ', roomName);
     return (
       <Card>
-        {rooms.currentRoom.roomName.room !== '' ? (
+        {room !== undefined ? (
           <Card.Header as="h5">
             <Row>
-              <Col>Current room is {rooms.currentRoom.roomName.room}</Col>
+              <Col>Current room is {roomName}</Col>
               <Col>
                 <Button
                   className="float-right"
@@ -138,20 +136,7 @@ class ViewAllRooms extends React.Component {
           </Card.Header>
         ) : (
           <>
-            {Object.keys(roomList).length > 0 ? (
-              <>{this.RoomsAvailable(roomList)}</>
-            ) : (
-              <>
-                <Spinner
-                  as="span"
-                  animation="grow"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                Please wait...
-              </>
-            )}
+            <>{this.RoomsAvailable()}</>
             {
               <>
                 <br />
@@ -183,14 +168,6 @@ class ViewAllRooms extends React.Component {
                   >
                     Create room
                   </Button>
-                  <Button
-                    className="float-right"
-                    variant="secondary"
-                    type="submit"
-                    onClick={(e) => this.updateRooms(e)}
-                  >
-                    Update rooms
-                  </Button>
                 </Form>
               </>
             }
@@ -204,19 +181,16 @@ class ViewAllRooms extends React.Component {
 ViewAllRooms.propTypes = {
   getRoomList: PropTypes.func,
   joinRoom: PropTypes.func,
-  roomList: PropTypes.object,
-  key: PropTypes.any,
-  lobby: PropTypes.any,
-  allRooms: PropTypes.any,
-  currentRoom: PropTypes.object,
-  rooms: PropTypes.any,
   leaveRoom: PropTypes.func,
+  currentRoom: PropTypes.object,
+  rooms: PropTypes.object,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = (reduxStoreState) => {
   return {
-    currentRoom: reduxStoreState.rooms.currentRoom,
-    roomList: reduxStoreState.rooms.roomList,
+    rooms: reduxStoreState.rooms,
+    user: reduxStoreState.user,
   };
 };
 

@@ -1,8 +1,16 @@
-import { CREATE_USER } from '../constants';
+import { CREATE_USER, USER_CURRENT_ROOM } from '../constants';
 
-export default function (state = {}, action) {
+const initialState = {
+  user: '',
+};
+
+export default function (state = initialState, action) {
   switch (action.type) {
     case CREATE_USER:
+      return {
+        user: action.payload,
+      };
+    case USER_CURRENT_ROOM:
       return action.payload;
     default:
       return state;

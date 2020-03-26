@@ -13,7 +13,7 @@ class ViewAllUsers extends React.Component {
 
   getUsers(e) {
     e.preventDefault();
-    console.log('ViewAllUsers.js > getUserList ');
+    //console.log('ViewAllUsers.js > getUserList ');
     this.props.getUserList();
   }
 

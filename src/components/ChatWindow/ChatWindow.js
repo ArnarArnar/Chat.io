@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { array } from 'prop-types';
 import socketService from '../../services/socketService';
 import { connect } from 'react-redux';
 import { setMessages } from '../../Store/actions';
@@ -13,15 +13,19 @@ import Spinner from 'react-bootstrap/Spinner';
 
 class ChatWindow extends React.Component {
   componentDidMount() {
-    //console.log("ChatWindow > componentDidMount");
-    socketService.socket.on('updatechat', (roomName, data) => {
-      if (roomName == this.props.thisRoom.roomName.room) {
-        this.props.setMessages(data);
-      }
-      console.log('ChatWindow > updatechat. data.roomName', roomName, data);
-      this.setState({ messages: [data] });
-      console.log('ChatWindow > updatechat', this.props.messages);
-    });
+    console.log('ChatWindow > componentDidMount, this.props', this.props);
+    console.log(
+      'ChatWindow > componentDidMount, this.props.user',
+      this.props.user
+    );
+    // socketService.socket.on('updatechat', (roomName, data) => {
+    //   if (roomName == this.props.user.room) {
+    //     this.props.setMessages(data);
+    //   }
+    //   console.log('ChatWindow > updatechat. data.roomName', roomName, data);
+    //   this.setState({ messages: [data] });
+    //   console.log('ChatWindow > updatechat', this.props.messages);
+    // });
   }
 
   constructor(props) {
@@ -31,25 +35,19 @@ class ChatWindow extends React.Component {
       message: '' /* Current message */,
     };
   }
+
   sendMessage(e) {
     e.preventDefault();
-    // const testCurrentRoom = 'test';
-    // console.log('Send mess, this props ', this.props);
-    const testCurrentRoom = this.props.thisRoom.roomName.room;
-    console.log('testCurrentRoom ', testCurrentRoom);
+    const { room } = this.props.user;
+    console.log('testCurrentRoom ', room);
     const { message } = this.state;
-    console.log(
-      'ChatWindow > sendMessage',
-      message,
-      'current room ',
-      testCurrentRoom
-    );
+    console.log('ChatWindow > sendMessage', message, 'current room ', room);
     if (message === '') {
       return false;
     }
     socketService.socket.emit('sendmsg', {
       msg: message,
-      roomName: testCurrentRoom,
+      roomName: room,
     });
     this.setState({ message: '' });
   }
@@ -61,7 +59,56 @@ class ChatWindow extends React.Component {
     console.log('logout', e);
   }
 
+  messages() {
+    const { rooms } = this.props;
+    const currentRoomName = this.props.user.room;
+    console.log(
+      'ObjectKey ',
+      Object.entries(rooms.find((key) => rooms[key] === currentRoomName))
+    );
+  }
+
+  renderMessages() {
+    const { rooms } = this.props;
+    const { room } = this.props.user;
+    console.log('rooms', rooms);
+    console.log('room', room);
+
+    const index = Object.entries(rooms).findIndex((key) => key[0] == room);
+    console.log('index', index);
+
+    console.log('Object.entries(rooms)', Object.entries(rooms));
+    if (rooms[room].messageHistory) {
+      console.log(
+        'rooms[room].messageHistory',
+        Object.entries(rooms[room].messageHistory)
+      );
+
+      return Object.keys(
+        rooms[room].messageHistory.map((m) => {
+          <li className="list-group-item" key={m.timestamp}>
+            <strong>
+              {m.nick}
+              {console.log('m', m.nick)}
+            </strong>
+            <p>{m.timestamp}</p>
+            <p>{m.message}</p>{' '}
+          </li>;
+        })
+      );
+    }
+    return <strong>No messages...</strong>;
+  }
+
   render() {
+    //const { rooms } = this.props;
+    const { room } = this.props.user;
+    //console.log('rooms', rooms);
+    //console.log('room', room);
+    console.log('this.props.user', this.props.user);
+    var test;
+
+    console.log(test);
     return (
       <div
         className="bg-light page"
@@ -71,14 +118,8 @@ class ChatWindow extends React.Component {
           <Col>
             <Container>
               <ul className="list-group" style={{ marginBottom: '60px' }}>
-                {this.props.messages.length > 0 ? (
-                  this.props.messages.map((m) => (
-                    <li className="list-group-item" key={m.timestamp}>
-                      <strong>{m.nick}</strong>
-                      <p>{m.timestamp}</p>
-                      <p>{m.message}</p>{' '}
-                    </li>
-                  ))
+                {room !== undefined ? (
+                  this.renderMessages()
                 ) : (
                   <div className="d-flex justify-content-center">
                     <Spinner
@@ -123,23 +164,17 @@ class ChatWindow extends React.Component {
 
 //TODO taka til
 ChatWindow.propTypes = {
-  getRoomList: PropTypes.func,
-  joinRoom: PropTypes.func,
-  roomList: PropTypes.object,
-  key: PropTypes.any,
-  lobby: PropTypes.any,
-  allRooms: PropTypes.any,
-  currentRoom: PropTypes.object,
-  room: PropTypes.any,
-  thisRoom: PropTypes.object,
   setMessages: PropTypes.func,
-  messages: PropTypes.array,
+  user: PropTypes.object,
+  rooms: PropTypes.object,
+  messages: array,
+  length: PropTypes.number,
 };
 
 const mapStateToProps = (reduxStoreState) => {
   return {
-    thisRoom: reduxStoreState.rooms.currentRoom,
-    messages: reduxStoreState.messages,
+    user: reduxStoreState.user,
+    rooms: reduxStoreState.rooms,
   };
 };
 
