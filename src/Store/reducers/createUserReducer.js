@@ -11,7 +11,10 @@ export default function (state = initialState, action) {
         user: action.payload,
       };
     case USER_CURRENT_ROOM:
-      return action.payload;
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

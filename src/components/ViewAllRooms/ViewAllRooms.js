@@ -5,7 +5,7 @@ import { getRoomList, joinRoom } from '../../Store/actions';
 import socketService from '../../services/socketService';
 
 import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
+//import Form from 'react-bootstrap/Form';
 //import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 //import Container from 'react-bootstrap/Container';
@@ -13,14 +13,13 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import PropTypes from 'prop-types';
+import CreateRoomFrom from '../Forms/CreateRoomFrom';
 
 class ViewAllRooms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hasJoinedRoom: false,
-      roomName: '',
-      roomNameError: null,
     };
   }
 
@@ -36,17 +35,6 @@ class ViewAllRooms extends React.Component {
     this.props.joinRoom({
       room: e.target.innerText,
     });
-  }
-
-  async createRoom(e) {
-    e.preventDefault();
-    const { roomName } = this.state;
-    this.props.joinRoom({
-      room: roomName,
-    });
-    this.setState({ roomName: '' });
-
-    // this.props.getRoomList();
   }
 
   leaveRoom(e) {
@@ -77,51 +65,14 @@ class ViewAllRooms extends React.Component {
     );
   }
 
-  onChange(e) {
-    const { rooms } = this.props;
-    //console.log('onChange > this.props', rooms);
-    if (e.target.name === 'roomName') {
-      const roomName = e.target.value;
-      if (roomName.indexOf(' ') > 0) {
-        this.setState({ roomNameError: 'Room name cannot spaces' }, () => {
-          console.log(this.state.roomNameError);
-        });
-      } else if (!roomName.replace(/\s/g, '').length) {
-        this.setState(
-          { userNameError: 'The room name cannot only contain whitespace' },
-          () => {
-            console.log(this.state.roomNameError);
-          }
-        );
-      } else if (Object.prototype.hasOwnProperty.call(rooms, roomName)) {
-        this.setState(
-          {
-            roomNameError:
-              'A room already has this name, please select another one',
-          },
-          () => {
-            console.log(this.state.roomNameError);
-          }
-        );
-      } else {
-        this.setState({ roomNameError: null });
-      }
-    }
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
   render() {
-    //const rooms = this.props.rooms;
     const { room } = this.props.user;
-    const roomName = this.state.user;
-    //console.log('ViewAllRooms > this.props.rooms', rooms);
-    //console.log('ViewAllRooms > this.state.roomName ', roomName);
     return (
       <Card>
         {room !== undefined ? (
           <Card.Header as="h5">
             <Row>
-              <Col>Current room is {roomName}</Col>
+              <Col>Current room is {room}</Col>
               <Col>
                 <Button
                   className="float-right"
@@ -139,36 +90,9 @@ class ViewAllRooms extends React.Component {
             <>{this.RoomsAvailable()}</>
             {
               <>
+                <CreateRoomFrom />
                 <br />
                 <br />
-                <Form>
-                  <Form.Group controlId="form-room-name">
-                    <Form.Label>Create new room</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      name="roomName"
-                      value={roomName}
-                      placeholder="Enter a name for a new chat room"
-                      onChange={(e) => this.onChange(e)}
-                    />
-                    {this.state.roomNameError !== null && (
-                      <Form.Control.Feedback
-                        style={{ display: 'block' }}
-                        type="invalid"
-                      >
-                        {this.state.roomNameError}
-                      </Form.Control.Feedback>
-                    )}
-                  </Form.Group>
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={(e) => this.createRoom(e)}
-                  >
-                    Create room
-                  </Button>
-                </Form>
               </>
             }
           </>
