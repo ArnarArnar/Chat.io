@@ -19,7 +19,7 @@ class LoginForm extends React.Component {
   async logIn(e) {
     e.preventDefault();
     const { userName } = this.state;
-    const isLoggedIn = await await this.props.addUser(userName);
+    const isLoggedIn = await this.props.addUser(userName);
     // console.log('addUserSuccess', isLoggedIn);
     if (!isLoggedIn) {
       {
@@ -44,7 +44,7 @@ class LoginForm extends React.Component {
     if (e.target.name === 'userName') {
       const userName = e.target.value;
       if (userName.indexOf(' ') > 0) {
-        this.setState({ userNameError: 'Username cannot spaces' }, () => {
+        this.setState({ userNameError: 'Username cannot use spaces' }, () => {
           console.log(this.state.userNameError);
         });
       } else if (!userName.replace(/\s/g, '').length) {

@@ -54,9 +54,9 @@ export const updateRoomInfo = (room, users, ops) => {
   return {
     type: UPDATE_ROOM_INFO,
     payload: {
-      room: room,
-      users: users,
-      ops: ops,
+      room,
+      users,
+      ops,
     },
   };
 };
@@ -71,11 +71,11 @@ export const userJoinsRoom = (room, user) => {
   };
 };
 
-export const updatechat = (name, messageHistory) => {
+export const updateChat = (room, messageHistory) => {
   return {
     type: UPDATE_CHAT,
     payload: {
-      name,
+      room,
       messageHistory,
     },
   };

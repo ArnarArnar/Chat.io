@@ -12,28 +12,26 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
 class ChatWindow extends React.Component {
-  componentDidMount() {
-    console.log('ChatWindow > componentDidMount, this.props', this.props);
-    console.log(
-      'ChatWindow > componentDidMount, this.props.user',
-      this.props.user
-    );
-    // socketService.socket.on('updatechat', (roomName, data) => {
-    //   if (roomName == this.props.user.room) {
-    //     this.props.setMessages(data);
-    //   }
-    //   console.log('ChatWindow > updatechat. data.roomName', roomName, data);
-    //   this.setState({ messages: [data] });
-    //   console.log('ChatWindow > updatechat', this.props.messages);
-    // });
-  }
-
   constructor(props) {
     super(props);
     this.state = {
       messages: [] /* List of all messages within the public lobby */,
       message: '' /* Current message */,
     };
+    this.divRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+  scrollToBottom() {
+    setInterval(() => {
+      this.divRef.current.scrollIntoView({ behavior: 'smooth' });
+    }, 500);
   }
 
   sendMessage(e) {
@@ -74,30 +72,22 @@ class ChatWindow extends React.Component {
     console.log('rooms', rooms);
     console.log('room', room);
 
-    const index = Object.entries(rooms).findIndex((key) => key[0] == room);
-    console.log('index', index);
+    const messagesInRoom = rooms[room].messageHistory;
+    messagesInRoom.map((message) => console.log('message', message));
 
-    console.log('Object.entries(rooms)', Object.entries(rooms));
-    if (rooms[room].messageHistory) {
-      console.log(
-        'rooms[room].messageHistory',
-        Object.entries(rooms[room].messageHistory)
-      );
-
-      return Object.keys(
-        rooms[room].messageHistory.map((m) => {
-          <li className="list-group-item" key={m.timestamp}>
-            <strong>
-              {m.nick}
-              {console.log('m', m.nick)}
-            </strong>
-            <p>{m.timestamp}</p>
-            <p>{m.message}</p>{' '}
-          </li>;
-        })
-      );
-    }
-    return <strong>No messages...</strong>;
+    return (
+      <>
+        {messagesInRoom.map((message) => (
+          <li className="list-group-item" key={message.timestamp}>
+            <strong>{message.nick}</strong>
+            <p>{message.timestamp}</p>
+            <p>{message.message}</p>{' '}
+          </li>
+        ))}
+        <div ref={this.divRef} />
+      </>
+    );
+    //return <strong>No messages...</strong>;
   }
 
   render() {
@@ -110,14 +100,19 @@ class ChatWindow extends React.Component {
 
     console.log(test);
     return (
-      <div
-        className="bg-light page"
-        style={{ height: '100vh', overflowX: 'hidden' }}
-      >
+      <div>
         <Row>
           <Col>
             <Container>
-              <ul className="list-group" style={{ marginBottom: '60px' }}>
+              <div
+                className="list-group"
+                variant="bottom"
+                style={{
+                  marginBottom: '60px',
+                  height: '50vh',
+                  overflowX: 'hidden',
+                }}
+              >
                 {room !== undefined ? (
                   this.renderMessages()
                 ) : (
@@ -132,11 +127,10 @@ class ChatWindow extends React.Component {
                     Loading messages...
                   </div>
                 )}
-              </ul>
+              </div>
               <Form
                 inline
                 variant="bottom"
-                className="w-100 d-flex justify-content-between align-items-center fixed-bottom"
                 onSubmit={(e) => this.sendMessage(e)}
               >
                 <Form.Group style={{ flex: 1 }}>

@@ -1,6 +1,6 @@
 import connectToSocketIOServer from 'socket.io-client';
 import { store } from '../index';
-import { updateRoomInfo, userJoinsRoom } from '../Store/actions';
+import { updateRoomInfo, userJoinsRoom, updateChat } from '../Store/actions';
 
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
@@ -14,20 +14,24 @@ const socketService = () => {
   });
 
   // eslint-disable-next-line no-unused-vars
-  socket.emit('updatechat', (room, messageHistory) => {
-    // console.log('::::Update users:::::');
-    // console.log('room', room);
-    // console.log('messageHistory', messageHistory);
+  socket.on('updatechat', (room, messageHistory) => {
+    console.log('::::Update users:::::');
+    console.log('room', room);
+    console.log('messageHistory', messageHistory);
+    store.dispatch(updateChat(room, messageHistory));
   });
 
   socket.on('servermessage', (event, room, user) => {
-    // console.log('::::servermessage:::::');
+    console.log('::::servermessage:::::');
 
-    // console.log('Event', event);
-    // console.log('room', room);
-    // console.log('users', user);
+    console.log('Event', event);
+    console.log('room', room);
+    console.log('users', user);
     if (event === 'join') {
       store.dispatch(userJoinsRoom(room, user));
+      if (user === store.getState().user.user) {
+        console.log('KEMRU');
+      }
     }
   });
 
@@ -42,6 +46,7 @@ const socketService = () => {
   const addUser = (userName) => {
     //console.log('====================socket', socket);
     //console.log('socketService > addUser', userName);
+
     return new Promise((resolve) => {
       socket.emit('adduser', userName, function (data) {
         console.log('Callback from addUser socket service', data);
@@ -115,6 +120,7 @@ const socketService = () => {
     joinRoom,
     //listenForChanges,
     leaveRoom,
+    updateChat,
   };
 };
 

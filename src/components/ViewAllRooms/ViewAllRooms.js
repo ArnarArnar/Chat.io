@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { getRoomList, joinRoom } from '../../Store/actions';
 import socketService from '../../services/socketService';
+import ViewAllUsers from '../ViewAllUsers/ViewAllUsers';
+import ChatWindow from '../ChatWindow/ChatWindow';
 
 import ListGroup from 'react-bootstrap/ListGroup';
 //import Form from 'react-bootstrap/Form';
@@ -67,9 +69,14 @@ class ViewAllRooms extends React.Component {
 
   render() {
     const { room } = this.props.user;
+    const { rooms } = this.props;
+    console.log('ROOMS', rooms);
+
+    console.log('rooms', Object.keys(rooms), 'room', room);
+
     return (
       <Card>
-        {room !== undefined ? (
+        {Object.keys(rooms).find((r) => r === room) ? (
           <Card.Header as="h5">
             <Row>
               <Col>Current room is {room}</Col>
@@ -82,6 +89,14 @@ class ViewAllRooms extends React.Component {
                 >
                   Back to lobby
                 </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={8}>
+                <ChatWindow />
+              </Col>
+              <Col sm={4}>
+                <ViewAllUsers />
               </Col>
             </Row>
           </Card.Header>

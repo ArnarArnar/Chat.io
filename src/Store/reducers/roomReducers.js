@@ -1,4 +1,9 @@
-import { GET_ROOM_LIST, UPDATE_ROOM_INFO, UPDATE_CHAT } from '../constants';
+import {
+  GET_ROOM_LIST,
+  UPDATE_ROOM_INFO,
+  UPDATE_CHAT,
+  USER_CURRENT_ROOM,
+} from '../constants';
 
 const initialState = {
   lobby: {},
@@ -13,38 +18,31 @@ export default function (state = initialState, action) {
     case GET_ROOM_LIST:
       return { ...state, ...action.payload };
     case UPDATE_ROOM_INFO:
-      // eslint-disable-next-line no-case-declarations
-      //const test = console.log('action.payload.room', action.payload.room);
-      // eslint-disable-next-line no-case-declarations
-      const list = { ...state[action.payload.room] };
-      console.log('RoomReducer, list', list);
+      console.log('UPDATE_ROOM_INFO', action.payload.ops);
       return {
         ...state,
+
         [action.payload.room]: {
           ...state[action.payload.room],
           users: action.payload.users,
           ops: action.payload.ops,
         },
       };
-    // case UPDATE_ROOM_INFO:
-    //   return {
-    //     ...state,
-    //     ...state.rooms,
-    //     //...state.rooms[action.payload.room],
-    //     [action.payload.room]: {
-    //       // /...state.rooms[action.payload.room],
-    //       users: action.payload.users,
-    //       ops: action.payload.ops,
-    //     },
-    //   };
     case UPDATE_CHAT:
       return {
-        ...action.payload,
-        // ...state,
-        // [action.payload.room]: {
-        //   ...state[action.payload.room],
-        //   messageHistory: action.payload.messageHistory,
-        // },
+        ...state,
+        [action.payload.room]: {
+          ...state[action.payload.room],
+          messageHistory: action.payload.messageHistory,
+        },
+      };
+    case USER_CURRENT_ROOM:
+      return {
+        ...state,
+        [action.payload.room]: {
+          ...state[action.payload.room],
+          users: { [action.payload.user]: action.payload.user },
+        },
       };
     default:
       return state;
