@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { array } from 'prop-types';
+import PropTypes from 'prop-types';
 import socketService from '../../services/socketService';
 import { connect } from 'react-redux';
 
@@ -14,8 +14,7 @@ class ChatWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [] /* List of all messages within the public lobby */,
-      message: '' /* Current message */,
+      message: '',
     };
     this.divRef = React.createRef();
   }
@@ -154,8 +153,6 @@ class ChatWindow extends React.Component {
 ChatWindow.propTypes = {
   user: PropTypes.object,
   rooms: PropTypes.object,
-  messages: array,
-  length: PropTypes.number,
 };
 
 const mapStateToProps = (reduxStoreState) => {
@@ -166,57 +163,3 @@ const mapStateToProps = (reduxStoreState) => {
 };
 
 export default connect(mapStateToProps, { socketService })(ChatWindow);
-
-// ChatWindow.propTypes = {
-//   users: PropTypes.object,
-// };
-
-// // import React from 'react';
-// // import PropTypes from 'prop-types';
-// // import { socket } from '../../services/socketService';
-
-// // class ChatWindow extends React.Component {
-// //   componentDidMount() {
-// //     // console.log(socket);
-// //     // socket.on('message', message => {
-// //     //   const { messages } = this.state;
-// //     //   this.setState({ messages: [...messages, message] });
-// //     // });
-// //   }
-// //   constructor(props) {
-// //     super(props);
-// //     this.state = {
-// //       messages: [] /* List of all messages within the public lobby */,
-// //       message: '' /* Current message */,
-// //     };
-// //   }
-// //   sendMessage(message) {
-// //     if (message === '') {
-// //       return false;
-// //     }
-// //     socket.emit('message', message);
-// //     this.setState({ message: '' });
-// //   }
-// //   render() {
-// //     //const { users } = this.props;
-// //     return (
-// //       <div className="chat-window">
-// //         {/* <ChatWindow.Users users={users} />
-// //         <div className="input-container">
-// //           <input
-// //             type="text"
-// //             onChange={e => this.setState({ message: e.target.value })}
-// //             placeholder="Enter your message here..."
-// //           />
-// //           Send
-// //         </div> */}
-// //       </div>
-// //     );
-// //   }
-// // }
-
-// // ChatWindow.propTypes = {
-// //   users: PropTypes.object,
-// // };
-
-// // export default ChatWindow;
