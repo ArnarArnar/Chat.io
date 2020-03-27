@@ -1,6 +1,11 @@
 import connectToSocketIOServer from 'socket.io-client';
 import { store } from '../index';
-import { updateRoomInfo, userJoinsRoom, updateChat } from '../Store/actions';
+import {
+  updateRoomInfo,
+  userJoinsRoom,
+  updateChat,
+  userJoinRoomSuccess,
+} from '../Store/actions';
 
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
@@ -29,8 +34,10 @@ const socketService = () => {
     console.log('users', user);
     if (event === 'join') {
       store.dispatch(userJoinsRoom(room, user));
+      // Instead of having a local state for current room the user has an current room store state that is only controlled by emits from the server.
       if (user === store.getState().user.user) {
         console.log('KEMRU');
+        store.dispatch(userJoinRoomSuccess(room, user));
       }
     }
   });

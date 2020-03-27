@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes, { array } from 'prop-types';
 import socketService from '../../services/socketService';
 import { connect } from 'react-redux';
-import { setMessages } from '../../Store/actions';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -74,31 +73,26 @@ class ChatWindow extends React.Component {
 
     const messagesInRoom = rooms[room].messageHistory;
     messagesInRoom.map((message) => console.log('message', message));
-
-    return (
-      <>
-        {messagesInRoom.map((message) => (
-          <li className="list-group-item" key={message.timestamp}>
-            <strong>{message.nick}</strong>
-            <p>{message.timestamp}</p>
-            <p>{message.message}</p>{' '}
-          </li>
-        ))}
-        <div ref={this.divRef} />
-      </>
-    );
-    //return <strong>No messages...</strong>;
+    if (messagesInRoom.length > 0) {
+      return (
+        <>
+          {messagesInRoom.map((message) => (
+            <li className="list-group-item" key={message.timestamp}>
+              <strong>{message.nick}</strong>
+              <p>{message.timestamp}</p>
+              <p>{message.message}</p>{' '}
+            </li>
+          ))}
+          <div ref={this.divRef} />
+        </>
+      );
+    }
+    return <strong>No messages...</strong>;
   }
 
   render() {
-    //const { rooms } = this.props;
     const { room } = this.props.user;
-    //console.log('rooms', rooms);
-    //console.log('room', room);
     console.log('this.props.user', this.props.user);
-    var test;
-
-    console.log(test);
     return (
       <div>
         <Row>
@@ -158,7 +152,6 @@ class ChatWindow extends React.Component {
 
 //TODO taka til
 ChatWindow.propTypes = {
-  setMessages: PropTypes.func,
   user: PropTypes.object,
   rooms: PropTypes.object,
   messages: array,
@@ -172,9 +165,7 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { socketService, setMessages })(
-  ChatWindow
-);
+export default connect(mapStateToProps, { socketService })(ChatWindow);
 
 // ChatWindow.propTypes = {
 //   users: PropTypes.object,

@@ -4,6 +4,7 @@ import {
   GET_ROOM_LIST,
   //JOIN_ROOM,
   USER_CURRENT_ROOM,
+  USER_JOIN_SUCCESS,
   CREATE_ROOM,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
@@ -64,6 +65,16 @@ export const updateRoomInfo = (room, users, ops) => {
 export const userJoinsRoom = (room, user) => {
   return {
     type: USER_CURRENT_ROOM,
+    payload: {
+      room,
+      user,
+    },
+  };
+};
+
+export const userJoinRoomSuccess = (room, user) => {
+  return {
+    type: USER_JOIN_SUCCESS,
     payload: {
       room,
       user,
