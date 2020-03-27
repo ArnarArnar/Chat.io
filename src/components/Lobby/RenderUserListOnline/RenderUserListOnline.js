@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 //import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { getUserList } from '../../Store/actions';
+import { getUserList } from '../../../Store/actions';
 
 import PropTypes from 'prop-types';
 
-class ViewAllUsers extends React.Component {
-  componentDidMount() {
-    this.props.getUserList();
-  }
+class RenderUsersOnline extends React.Component {
+  // componentDidMount() {
+  //   this.props.getUserList();
+  // }
   userListItems(userList) {
     return userList.map((userList) => <li key={userList}>{userList}</li>);
   }
-
   render() {
     const { userList } = this.props;
     return (
@@ -32,7 +31,7 @@ class ViewAllUsers extends React.Component {
   }
 }
 
-ViewAllUsers.propTypes = {
+RenderUsersOnline.propTypes = {
   getUserList: PropTypes.func,
   userList: PropTypes.any,
   key: PropTypes.any,
@@ -44,4 +43,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { getUserList })(ViewAllUsers);
+export default connect(mapStateToProps, { getUserList })(RenderUsersOnline);

@@ -1,22 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 //import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 
 //import socketService from '../../services/socketService';
-import ViewAllRooms from '../ViewAllRooms/ViewAllRooms';
+import ViewAllRooms from '../../Lobby/Lobby/Lobby';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
 
-import LoginForm from '../Forms/LoginForm';
+import LogInForm from '../LogInForm/LogInForm';
+import Header from '../../Header/header';
 
 class LogIn extends React.Component {
-  signOut() {
-    this.setState({ isLoggedIn: false });
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -29,26 +24,13 @@ class LogIn extends React.Component {
           <Col>
             {this.props.user.user === '' ? (
               <>
-                <LoginForm />
+                <br />
+                <br />
+                <LogInForm />
               </>
             ) : (
               <>
-                <Navbar bg="dark" variant="dark">
-                  <Navbar.Brand>Chat.io</Navbar.Brand>
-                  <Navbar.Text>
-                    Logged in as: {this.props.user.user}
-                  </Navbar.Text>
-                  <Navbar.Collapse className="justify-content-end">
-                    <Button
-                      className="justify-content-end"
-                      variant="outline-light"
-                      type="submit"
-                      onClick={(e) => this.signOut(e)}
-                    >
-                      Sign Out
-                    </Button>{' '}
-                  </Navbar.Collapse>
-                </Navbar>
+                <Header />
                 <br />
                 <ViewAllRooms />
               </>

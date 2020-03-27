@@ -1,23 +1,21 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import { getRoomList, joinRoom } from '../../Store/actions';
-import socketService from '../../services/socketService';
-import ViewAllUsers from '../ViewAllUsers/ViewAllUsers';
-import ChatWindow from '../ChatWindow/ChatWindow';
-
 import ListGroup from 'react-bootstrap/ListGroup';
-//import Form from 'react-bootstrap/Form';
-//import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
-//import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-
+import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
-import CreateRoomFrom from '../Forms/CreateRoomFrom';
 
-class ViewAllRooms extends React.Component {
+import { getRoomList, joinRoom } from '../../../Store/actions';
+import socketService from '../../../services/socketService';
+import RenderUsersOnline from '../RenderUserListOnline/RenderUserListOnline';
+import ChatWindow from '../../Chat/ChatWindow/ChatWindow';
+import CreateRoomFrom from '../LobbyForm/LobbyForm';
+import RenderUserListOnline from '../../Chat/RenderUserListInRoom/RenderUserListOnline';
+
+class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,25 +23,27 @@ class ViewAllRooms extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    await this.props.getRoomList();
-  }
-
   async joinRoom(e) {
     e.preventDefault(e);
-    this.props.joinRoom({
+    const success = await this.props.joinRoom({
       room: e.target.innerText,
     });
+    // TODO: test to see if it works
+    if (success !== undefined) {
+      console.log('Join room no successful: ', success);
+      return <Alert color="primary">{success.reason}</Alert>;
+    }
   }
 
   leaveRoom(e) {
     e.preventDefault();
-    console.log('leave room', this.props.currentRoom.roomName.room);
-    socketService.leaveRoom(this.props.currentRoom.roomName.room);
+    const { room } = this.props.user;
+    console.log('leave room', room);
+    socketService.leaveRoom(room);
   }
+
   RoomsAvailable() {
     const { rooms } = this.props;
-    //console.log('Rooms available ', rooms);
     return (
       <Card>
         <Card.Header as="h5">Available Rooms</Card.Header>
@@ -68,9 +68,7 @@ class ViewAllRooms extends React.Component {
     const { room } = this.props.user;
     const { rooms } = this.props;
     console.log('ROOMS', rooms);
-
     console.log('rooms', Object.keys(rooms), 'room', room);
-
     return (
       <Card>
         {Object.keys(rooms).find((r) => r === room) ? (
@@ -93,28 +91,27 @@ class ViewAllRooms extends React.Component {
                 <ChatWindow />
               </Col>
               <Col sm={4}>
-                <ViewAllUsers />
+                <RenderUserListOnline />
               </Col>
             </Row>
           </Card.Header>
         ) : (
-          <>
-            <>{this.RoomsAvailable()}</>
-            {
-              <>
-                <CreateRoomFrom />
-                <br />
-                <br />
-              </>
-            }
-          </>
+          <Row>
+            <Col sm={8}>
+              {this.RoomsAvailable()}
+              <CreateRoomFrom />
+            </Col>
+            <Col sm={4}>
+              <RenderUsersOnline />
+            </Col>
+          </Row>
         )}
       </Card>
     );
   }
 }
 
-ViewAllRooms.propTypes = {
+Lobby.propTypes = {
   getRoomList: PropTypes.func,
   joinRoom: PropTypes.func,
   leaveRoom: PropTypes.func,
@@ -130,6 +127,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { getRoomList, joinRoom })(
-  ViewAllRooms
-);
+export default connect(mapStateToProps, { getRoomList, joinRoom })(Lobby);

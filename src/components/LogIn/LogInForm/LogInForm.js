@@ -2,10 +2,10 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import { addUser } from '../../Store/actions';
+import { addUser } from '../../../Store/actions';
 import PropTypes from 'prop-types';
 
-class LoginForm extends React.Component {
+class LogInForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class LoginForm extends React.Component {
     e.preventDefault();
     const { userName } = this.state;
     const isLoggedIn = await this.props.addUser(userName);
-    // console.log('addUserSuccess', isLoggedIn);
+    console.log('isLoggedIn', isLoggedIn);
     if (!isLoggedIn) {
       {
         this.setState(
@@ -40,7 +40,6 @@ class LoginForm extends React.Component {
   }
 
   onChange(e) {
-    //let { userName } = this.state;
     if (e.target.name === 'userName') {
       const userName = e.target.value;
       if (userName.indexOf(' ') > 0) {
@@ -99,7 +98,7 @@ class LoginForm extends React.Component {
   }
 }
 
-LoginForm.propTypes = {
+LogInForm.propTypes = {
   addUser: PropTypes.func,
   userName: PropTypes.string,
 };
@@ -111,4 +110,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { addUser })(LoginForm);
+export default connect(mapStateToProps, { addUser })(LogInForm);

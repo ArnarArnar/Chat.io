@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import socketService from '../../services/socketService';
+import socketService from '../../../services/socketService';
 import { connect } from 'react-redux';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import MessageForm from '../MessageForm/MessageForm';
 
 class ChatWindow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      message: '',
-    };
     this.divRef = React.createRef();
   }
 
@@ -30,25 +26,6 @@ class ChatWindow extends React.Component {
     setInterval(() => {
       this.divRef.current.scrollIntoView({ behavior: 'smooth' });
     }, 500);
-  }
-
-  sendMessage(e) {
-    e.preventDefault();
-    const { room } = this.props.user;
-    console.log('testCurrentRoom ', room);
-    const { message } = this.state;
-    console.log('ChatWindow > sendMessage', message, 'current room ', room);
-    if (message === '') {
-      return false;
-    }
-    socketService.socket.emit('sendmsg', {
-      msg: message,
-      roomName: room,
-    });
-    this.setState({ message: '' });
-  }
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
   }
 
   logout(e) {
@@ -71,8 +48,8 @@ class ChatWindow extends React.Component {
     console.log('room', room);
 
     const messagesInRoom = rooms[room].messageHistory;
-    messagesInRoom.map((message) => console.log('message', message));
-    if (messagesInRoom.length > 0) {
+
+    if (messagesInRoom) {
       return (
         <>
           {messagesInRoom.map((message) => (
@@ -100,6 +77,7 @@ class ChatWindow extends React.Component {
               <div
                 className="list-group"
                 variant="bottom"
+                ref={this.divRef}
                 style={{
                   marginBottom: '60px',
                   height: '50vh',
@@ -121,26 +99,7 @@ class ChatWindow extends React.Component {
                   </div>
                 )}
               </div>
-              <Form
-                inline
-                variant="bottom"
-                onSubmit={(e) => this.sendMessage(e)}
-              >
-                <Form.Group style={{ flex: 1 }}>
-                  <Form.Control
-                    required
-                    type="text"
-                    name="message"
-                    value={this.state.message}
-                    style={{ width: '100%' }}
-                    placeholder="Type Message here..."
-                    onChange={(e) => this.onChange(e)}
-                  />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                  Send
-                </Button>
-              </Form>
+              <MessageForm />
             </Container>
           </Col>
         </Row>

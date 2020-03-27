@@ -3,8 +3,9 @@ import {
   GET_USER_LIST,
   GET_ROOM_LIST,
   //JOIN_ROOM,
-  USER_CURRENT_ROOM,
+  USER_JOINS_ROOM,
   USER_JOIN_SUCCESS,
+  USER_LEFT_SUCCESS,
   CREATE_ROOM,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
@@ -15,9 +16,7 @@ import socketService from '../../services/socketService';
 
 export const addUser = (userName) => async (dispatchEvent) => {
   try {
-    //console.log('actions > addUser: ', userName);
     const successfullyAddedUser = await socketService.addUser(userName);
-    //console.log('Successful add', successfullyAddedUser);
     if (successfullyAddedUser) {
       dispatchEvent(addUserSuccess(userName));
       return true;
@@ -64,7 +63,7 @@ export const updateRoomInfo = (room, users, ops) => {
 
 export const userJoinsRoom = (room, user) => {
   return {
-    type: USER_CURRENT_ROOM,
+    type: USER_JOINS_ROOM,
     payload: {
       room,
       user,
@@ -72,9 +71,20 @@ export const userJoinsRoom = (room, user) => {
   };
 };
 
+// Update current users room
 export const userJoinRoomSuccess = (room, user) => {
   return {
     type: USER_JOIN_SUCCESS,
+    payload: {
+      room,
+      user,
+    },
+  };
+};
+
+export const userLeftRoomSuccess = (room, user) => {
+  return {
+    type: USER_LEFT_SUCCESS,
     payload: {
       room,
       user,
@@ -132,33 +142,20 @@ const createRoomSuccess = (roomName) => {
 
 export const joinRoom = (roomName) => async () => {
   try {
-    //console.log('actions > joinRoom: ', roomName);
+    console.log('actions > joinRoom: ', roomName);
     const joinedRoomSuccess = await socketService.joinRoom(roomName);
-    if (joinedRoomSuccess) {
-      // dispatchEvent(joinRoomSuccess({ roomName }));
-      return true;
-    } else {
-      //console.log('Unable to join room', joinRoomSuccess.reason);
-      return false;
+    console.log('actions > joinRoom > !joinedRoomSuccess', joinedRoomSuccess);
+    if (!joinedRoomSuccess) {
+      console.log(
+        '2actions > joinRoom > !joinedRoomSuccess',
+        joinedRoomSuccess
+      );
+      return joinedRoomSuccess.reason;
     }
   } catch (err) {
     throw new Error(err);
   }
 };
-
-// const joinRoomSuccess = (roomName) => {
-//   return {
-//     type: JOIN_ROOM,
-//     payload: roomName,
-//   };
-// };
-
-// const leaveRoom = (roomName) => {
-//   return {
-//     type: JOIN_ROOM,
-//     payload: roomName,
-//   };
-// };
 
 export const setMessages = (data) => {
   return {
@@ -166,75 +163,3 @@ export const setMessages = (data) => {
     payload: data,
   };
 };
-
-// import {
-//   GET_BOSSES,
-//   CREATE_BOSS,
-//   GET_BOSS_BY_ID,
-//   DELETE_BOSS
-// } from "../constants";
-// import bossService from "../../services/bossService";
-
-// export const getAllBosses = () => async dispatchEvent => {
-//   try {
-//     const allBosses = await bossService.getAllBosses();
-//     dispatchEvent(getAllBossesSuccess(allBosses));
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// const getAllBossesSuccess = bosses => ({
-//   type: GET_BOSSES,
-//   payload: bosses
-// });
-
-// export const getBossById = id => async dispatchEvent => {
-//   try {
-//     const bossById = await bossService.getBossById(id);
-//     dispatchEvent(getBossByIdSuccess(bossById));
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// const getBossByIdSuccess = bossById => ({
-//   type: GET_BOSS_BY_ID,
-//   payload: bossById
-// });
-
-// export const createBoss = (name, description, url) => async dispatchEvent => {
-//   try {
-//     bossService.createBoss({
-//       name,
-//       description,
-//       img: url
-//     });
-//     dispatchEvent(createBossSuccess({ name, description, img: url }));
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// export const createBossSuccess = (name, description, url) => {
-//   return {
-//     type: CREATE_BOSS,
-//     payload: { name, description, url }
-//   };
-// };
-
-// export const deleteBoss = id => async dispatchEvent => {
-//   try {
-//     bossService.deleteBoss(id);
-//     dispatchEvent(deleteBossSuccess(id));
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// export const deleteBossSuccess = id => {
-//   return {
-//     type: DELETE_BOSS,
-//     payload: id
-//   };
-// };

@@ -2,10 +2,10 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import { joinRoom } from '../../Store/actions';
+import { joinRoom } from '../../../Store/actions';
 import PropTypes from 'prop-types';
 
-class CreateRoomForm extends React.Component {
+class RoomForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -101,7 +101,7 @@ class CreateRoomForm extends React.Component {
   }
 }
 
-CreateRoomForm.propTypes = {
+RoomForm.propTypes = {
   joinRoom: PropTypes.func,
   rooms: PropTypes.object,
 };
@@ -113,4 +113,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { joinRoom })(CreateRoomForm);
+export default connect(mapStateToProps, { joinRoom })(RoomForm);

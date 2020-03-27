@@ -5,6 +5,7 @@ import {
   userJoinsRoom,
   updateChat,
   userJoinRoomSuccess,
+  userLeftRoomSuccess,
 } from '../Store/actions';
 
 const socketService = () => {
@@ -38,6 +39,12 @@ const socketService = () => {
       if (user === store.getState().user.user) {
         console.log('KEMRU');
         store.dispatch(userJoinRoomSuccess(room, user));
+      }
+    } else if (event === 'part') {
+      console.log('PART');
+      if (user === store.getState().user.user) {
+        console.log('PART USER', user);
+        store.dispatch(userLeftRoomSuccess('', user));
       }
     }
   });
@@ -98,15 +105,15 @@ const socketService = () => {
   const joinRoom = (roomName) => {
     //console.log('socketService > getUserList');
     return new Promise((resolve) => {
-      socket.emit('joinroom', roomName, function (data) {
-        //console.log('joinroom', data);
-        resolve(data);
+      socket.emit('joinroom', roomName, function (success, reason) {
+        console.log('joinroom', success, reason);
+        resolve(success, reason);
       });
     });
   };
 
   const leaveRoom = (roomName) => {
-    //console.log('socketService > leaveRoom');
+    console.log('socketService > leaveRoom', roomName);
     socket.emit('partroom', roomName);
   };
 

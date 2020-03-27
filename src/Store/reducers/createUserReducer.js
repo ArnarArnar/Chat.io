@@ -1,4 +1,8 @@
-import { CREATE_USER, USER_JOIN_SUCCESS } from '../constants';
+import {
+  CREATE_USER,
+  USER_JOIN_SUCCESS,
+  USER_LEFT_SUCCESS,
+} from '../constants';
 
 const initialState = {
   user: '',
@@ -11,6 +15,11 @@ export default function (state = initialState, action) {
         user: action.payload,
       };
     case USER_JOIN_SUCCESS:
+      return {
+        user: action.payload.user,
+        room: action.payload.room,
+      };
+    case USER_LEFT_SUCCESS:
       return {
         user: action.payload.user,
         room: action.payload.room,

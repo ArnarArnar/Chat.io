@@ -2,7 +2,7 @@ import {
   GET_ROOM_LIST,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
-  USER_CURRENT_ROOM,
+  USER_JOINS_ROOM,
 } from '../constants';
 
 const initialState = {
@@ -18,7 +18,8 @@ export default function (state = initialState, action) {
     case GET_ROOM_LIST:
       return { ...state, ...action.payload };
     case UPDATE_ROOM_INFO:
-      console.log('UPDATE_ROOM_INFO', action.payload.ops);
+      console.log('UPDATE_ROOM_INFO ops', action.payload.ops);
+      console.log('UPDATE_ROOM_INFO user', action.payload.ops);
       return {
         ...state,
 
@@ -36,12 +37,16 @@ export default function (state = initialState, action) {
           messageHistory: action.payload.messageHistory,
         },
       };
-    case USER_CURRENT_ROOM:
+    case USER_JOINS_ROOM:
+      console.log('UPDATE_ROOM_INFO payload', action.payload);
       return {
         ...state,
         [action.payload.room]: {
           ...state[action.payload.room],
-          users: { [action.payload.user]: action.payload.user },
+          users: {
+            ...state[action.payload.room].users,
+            [action.payload.user]: action.payload.user,
+          },
         },
       };
     default:
