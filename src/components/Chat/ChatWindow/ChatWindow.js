@@ -15,18 +15,18 @@ class ChatWindow extends React.Component {
     this.divRef = React.createRef();
   }
 
-  componentDidMount() {
-    this.scrollToBottom();
-  }
+  // componentDidMount() {
+  //   this.scrollToBottom();
+  // }
 
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
-  scrollToBottom() {
-    setInterval(() => {
-      this.divRef.current.scrollIntoView({ behavior: 'smooth' });
-    }, 500);
-  }
+  // componentDidUpdate() {
+  //   this.scrollToBottom();
+  // }
+  // scrollToBottom() {
+  //   setInterval(() => {
+  //     this.divRef.current.scrollIntoView({ behavior: 'smooth' });
+  //   }, 500);
+  // }
 
   logout(e) {
     console.log('logout', e);
