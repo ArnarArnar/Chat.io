@@ -1,6 +1,6 @@
 import {
   CREATE_USER,
-  GET_USER_LIST,
+  UPDATE_USER_LIST,
   GET_ROOM_LIST,
   //JOIN_ROOM,
   USER_JOINS_ROOM,
@@ -19,6 +19,7 @@ export const addUser = (userName) => async (dispatchEvent) => {
     const successfullyAddedUser = await socketService.addUser(userName);
     if (successfullyAddedUser) {
       dispatchEvent(addUserSuccess(userName));
+      socketService.getUpdatedUserList();
       return true;
     }
     return false;
@@ -34,21 +35,29 @@ const addUserSuccess = (userName) => {
   };
 };
 
-export const getUserList = () => async (dispatchEvent) => {
-  try {
-    //console.log('actions > getUserList: before');
-    const allUsers = await socketService.getUserList();
-    //console.log('actions > getUserList: after', allUsers);
-    dispatchEvent(getUserListSuccess(allUsers));
-  } catch (err) {
-    throw new Error(err);
-  }
-};
+// export const getUserList = () =>  (dispatchEvent) => {
+//   try {
+//     //console.log('actions > getUserList: before');
+//     const allUsers = await socketService.getUserList();
+//     //console.log('actions > getUserList: after', allUsers);
+//     dispatchEvent(getUserListSuccess(allUsers));
+//   } catch (err) {
+//     throw new Error(err);
+//   }
+// };
 
-const getUserListSuccess = (userList) => ({
-  type: GET_USER_LIST,
-  payload: userList,
-});
+// export const updateUserList = () =>  (dispatchEvent) => {
+//     dispatchEvent(updateUserList(userList));
+// };
+
+// socketService.getUserList();
+
+export const updateUserList = (userList) => {
+  return {
+    type: UPDATE_USER_LIST,
+    payload: userList,
+  };
+};
 
 export const updateRoomInfo = (room, users, ops) => {
   return {

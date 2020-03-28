@@ -1,14 +1,14 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import { store } from '../../index';
 import signOut from '../LogIn/LogIn/LogIn';
+import PropTypes from 'prop-types';
 
-const Header = () => {
+const Header = ({ userName }) => {
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand>Chat.io</Navbar.Brand>
-      <Navbar.Text>Logged in as: {store.getState().user.user}</Navbar.Text>
+      <Navbar.Text>Logged in as: {userName}</Navbar.Text>
       <Navbar.Collapse className="justify-content-end">
         <Button
           className="justify-content-end"
@@ -21,6 +21,10 @@ const Header = () => {
       </Navbar.Collapse>
     </Navbar>
   );
+};
+
+Header.propTypes = {
+  userName: PropTypes.string,
 };
 
 export default Header;

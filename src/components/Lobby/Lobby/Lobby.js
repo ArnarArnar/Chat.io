@@ -1,19 +1,19 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Alert from 'react-bootstrap/Alert';
+
 import PropTypes from 'prop-types';
 
-import { getRoomList, joinRoom } from '../../../Store/actions';
+import { getRoomList } from '../../../Store/actions';
 import socketService from '../../../services/socketService';
 import RenderUsersOnline from '../RenderUserListOnline/RenderUserListOnline';
 import ChatWindow from '../../Chat/ChatWindow/ChatWindow';
 import CreateRoomFrom from '../LobbyForm/LobbyForm';
 import RenderUserListOnline from '../../Chat/RenderUserListInRoom/RenderUserListOnline';
+import RenderRoomsAvailable from '../RenderRoomsAvailable/RenderRoomsAvailable';
 
 class Lobby extends React.Component {
   constructor(props) {
@@ -23,45 +23,15 @@ class Lobby extends React.Component {
     };
   }
 
-  async joinRoom(e) {
-    e.preventDefault(e);
-    const success = await this.props.joinRoom({
-      room: e.target.innerText,
-    });
-    // TODO: test to see if it works
-    if (success !== undefined) {
-      console.log('Join room no successful: ', success);
-      return <Alert color="primary">{success.reason}</Alert>;
-    }
-  }
+  // componentDidMount() {
+  //   this.props.getUserList();
+  // }
 
   leaveRoom(e) {
     e.preventDefault();
     const { room } = this.props.user;
     console.log('leave room', room);
     socketService.leaveRoom(room);
-  }
-
-  RoomsAvailable() {
-    const { rooms } = this.props;
-    return (
-      <Card>
-        <Card.Header as="h5">Available Rooms</Card.Header>
-        <ListGroup>
-          {Object.entries(rooms).map((l) => {
-            return (
-              <ListGroup.Item
-                action
-                onClick={(e) => this.joinRoom(e)}
-                key={l[0]}
-              >
-                {l[0]}
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
-      </Card>
-    );
   }
 
   render() {
@@ -98,7 +68,7 @@ class Lobby extends React.Component {
         ) : (
           <Row>
             <Col sm={8}>
-              {this.RoomsAvailable()}
+              <RenderRoomsAvailable />
               <CreateRoomFrom />
             </Col>
             <Col sm={4}>
@@ -112,8 +82,8 @@ class Lobby extends React.Component {
 }
 
 Lobby.propTypes = {
+  //getUserList: PropTypes.func,
   getRoomList: PropTypes.func,
-  joinRoom: PropTypes.func,
   leaveRoom: PropTypes.func,
   currentRoom: PropTypes.object,
   rooms: PropTypes.object,
@@ -122,9 +92,10 @@ Lobby.propTypes = {
 
 const mapStateToProps = (reduxStoreState) => {
   return {
+    userList: reduxStoreState.userList,
     rooms: reduxStoreState.rooms,
     user: reduxStoreState.user,
   };
 };
 
-export default connect(mapStateToProps, { getRoomList, joinRoom })(Lobby);
+export default connect(mapStateToProps, { getRoomList })(Lobby);

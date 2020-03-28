@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import { addUser } from '../../../Store/actions';
 import PropTypes from 'prop-types';
 
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 class LogInForm extends React.Component {
   constructor(props) {
     super(props);
@@ -64,39 +67,56 @@ class LogInForm extends React.Component {
     const { userName } = this.state;
     return (
       <Form>
-        <Form.Group controlId="form-user-name">
-          <Form.Label as="h5">Create a username</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            name="userName"
-            value={userName}
-            placeholder="Choose a username"
-            onChange={(e) => this.onChange(e)}
-          />
-          {this.state.userNameError !== null && (
-            <Form.Control.Feedback style={{ display: 'block' }} type="invalid">
-              {this.state.userNameError}
-            </Form.Control.Feedback>
-          )}
-          {this.state.isLoggedIn !== null && (
-            <Form.Control.Feedback style={{ display: 'block' }} type="invalid">
-              {this.state.isLoggedInError}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
-        <Button
-          className="btn-block"
-          variant="primary"
-          type="submit"
-          onClick={(e) => this.logIn(e)}
-        >
-          Submit
-        </Button>
+        <Row>
+          <Col xs={12} md={8}>
+            <Form.Group controlId="form-user-name" className="align-self-end">
+              <Form.Label as="h5">Create a username</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="userName"
+                value={userName}
+                placeholder="Choose a username"
+                onChange={(e) => this.onChange(e)}
+              />
+              {this.state.userNameError !== null && (
+                <Form.Control.Feedback
+                  style={{ display: 'block' }}
+                  type="invalid"
+                >
+                  {this.state.userNameError}
+                </Form.Control.Feedback>
+              )}
+              {this.state.isLoggedIn !== null && (
+                <Form.Control.Feedback
+                  style={{ display: 'block' }}
+                  type="invalid"
+                >
+                  {this.state.isLoggedInError}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
+          <Col xs={6} md={4} className="align-self-end" style={buttonStyle}>
+            <Button
+              className="btn-block"
+              //placement="bottom"
+              variant="primary"
+              type="submit"
+              onClick={(e) => this.logIn(e)}
+            >
+              Submit
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }
 }
+
+const buttonStyle = {
+  paddingBottom: '16px',
+};
 
 LogInForm.propTypes = {
   addUser: PropTypes.func,

@@ -1,6 +1,7 @@
 import connectToSocketIOServer from 'socket.io-client';
 import { store } from '../index';
 import {
+  updateUserList,
   updateRoomInfo,
   userJoinsRoom,
   updateChat,
@@ -10,6 +11,12 @@ import {
 
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
+
+  socket.on('userlist', (userList) => {
+    console.log('::::Update usersList:::::');
+    console.log('updateUserList > userList', userList);
+    store.dispatch(updateUserList(userList));
+  });
 
   socket.on('updateusers', (room, users, ops) => {
     console.log('::::Update users:::::');
@@ -69,27 +76,10 @@ const socketService = () => {
     });
   };
 
-  const getUserList = async () => {
-    //console.log('socketService > getUserList');
+  const getUpdatedUserList = () => {
+    console.log('socketService > getUpdatedUserList');
     socket.emit('users');
-    return new Promise((resolve) => {
-      socket.on('userlist', function (data) {
-        console.log(data);
-        resolve(data);
-      });
-    });
   };
-
-  // const disconnect = () => {
-  //   console.log('socketService > disconnect');
-  //   socket.emit('disconnect', 'arnara17');
-  //   socket.on('updateusers', (room, users, ops) => {
-  //     console.log('::::Update users:::::');
-  //     console.log('room', room);
-  //     console.log('users', users);
-  //     console.log('ops', ops);
-  //   });
-  // };
 
   const getRoomList = async () => {
     //console.log('socketService > getRoomList');
@@ -128,7 +118,7 @@ const socketService = () => {
   return {
     socket,
     addUser,
-    getUserList,
+    getUpdatedUserList,
     //disconnect,
     getRoomList,
     joinRoom,
