@@ -4,15 +4,14 @@ import {
   USER_JOINS_ROOM,
   USER_JOIN_SUCCESS,
   USER_LEFT_SUCCESS,
-  CREATE_ROOM,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
-  SET_MESSAGES,
 } from '../constants';
 
 import socketService from '../../services/socketService';
 
 export const addUser = (userName) => async (dispatchEvent) => {
+  console.log('actions > addUser: ', userName);
   try {
     const successfullyAddedUser = await socketService.addUser(userName);
     if (successfullyAddedUser) {
@@ -27,6 +26,7 @@ export const addUser = (userName) => async (dispatchEvent) => {
 };
 
 const addUserSuccess = (userName) => {
+  console.log('actions > addUserSuccess: ', userName);
   return {
     type: CREATE_USER,
     payload: userName,
@@ -34,6 +34,7 @@ const addUserSuccess = (userName) => {
 };
 
 export const updateUserList = (userList) => {
+  console.log('actions > updateUserList: ', userList);
   return {
     type: UPDATE_USER_LIST,
     payload: userList,
@@ -41,6 +42,7 @@ export const updateUserList = (userList) => {
 };
 
 export const updateRoomInfo = (room, users, ops) => {
+  console.log('actions > updateRoomInfo: ', room, users, ops);
   return {
     type: UPDATE_ROOM_INFO,
     payload: {
@@ -52,6 +54,7 @@ export const updateRoomInfo = (room, users, ops) => {
 };
 
 export const userJoinsRoom = (room, user) => {
+  console.log('actions > userJoinsRoom: ', room, user);
   return {
     type: USER_JOINS_ROOM,
     payload: {
@@ -63,6 +66,7 @@ export const userJoinsRoom = (room, user) => {
 
 // Update current users room
 export const userJoinRoomSuccess = (room, user) => {
+  console.log('actions > userJoinRoomSuccess: ', room, user);
   return {
     type: USER_JOIN_SUCCESS,
     payload: {
@@ -73,6 +77,7 @@ export const userJoinRoomSuccess = (room, user) => {
 };
 
 export const userLeftRoomSuccess = (room, user) => {
+  console.log('actions > userLeftRoomSuccess: ', room, user);
   return {
     type: USER_LEFT_SUCCESS,
     payload: {
@@ -83,6 +88,7 @@ export const userLeftRoomSuccess = (room, user) => {
 };
 
 export const updateChat = (room, messageHistory) => {
+  console.log('actions > updateChat: ', room, messageHistory);
   return {
     type: UPDATE_CHAT,
     payload: {
@@ -92,36 +98,14 @@ export const updateChat = (room, messageHistory) => {
   };
 };
 
-// TODO
-export const createRoom = (roomName) => async (dispatchEvent) => {
-  try {
-    //console.log('actions > createRoom: ', roomName);
-    const roomCreatedSuccess = socketService.createRoom(roomName);
-    if (roomCreatedSuccess) {
-      dispatchEvent(createRoomSuccess({ roomName }));
-      return true;
-    }
-    return false;
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-const createRoomSuccess = (roomName) => {
-  return {
-    type: CREATE_ROOM,
-    payload: roomName,
-  };
-};
-
 export const joinRoom = (roomName) => async () => {
   try {
     console.log('actions > joinRoom: ', roomName);
     const joinedRoomSuccess = await socketService.joinRoom(roomName);
-    console.log('actions > joinRoom > !joinedRoomSuccess', joinedRoomSuccess);
+    //console.log('actions > joinRoom > !joinedRoomSuccess', joinedRoomSuccess);
     if (!joinedRoomSuccess) {
       console.log(
-        '2actions > joinRoom > !joinedRoomSuccess',
+        //'2actions > joinRoom > !joinedRoomSuccess',
         joinedRoomSuccess
       );
       return joinedRoomSuccess.reason;
@@ -129,11 +113,4 @@ export const joinRoom = (roomName) => async () => {
   } catch (err) {
     throw new Error(err);
   }
-};
-
-export const setMessages = (data) => {
-  return {
-    type: SET_MESSAGES,
-    payload: data,
-  };
 };

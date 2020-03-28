@@ -2,18 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
+import { kickUser } from '../../../Store/actions';
 
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
 
 class RenderUserListInRoom extends React.Component {
-  componentDidMount() {}
+  kick(e) {
+    e.preventDefault(e);
+    this.props.kickUser({
+      room: e.target.innerText,
+    });
+  }
 
   userListItems(currentRoom) {
     return Object.keys(currentRoom.users).map((u) => {
       if (Object.keys(currentRoom.ops).find((o) => o == u)) {
-        return <ListGroup.Item key={u}> {u} Operator</ListGroup.Item>;
+        return <ListGroup.Item key={u}> {u} Op</ListGroup.Item>;
       }
-      return <ListGroup.Item key={u}>{u}</ListGroup.Item>;
+      return (
+        <ListGroup.Item key={u}>
+          {u}
+          <Button size="sm" variant="warning" onClick={(e) => this.kick(e)}>
+            Kick
+          </Button>
+        </ListGroup.Item>
+      );
     });
   }
   render() {
@@ -36,6 +50,7 @@ class RenderUserListInRoom extends React.Component {
 }
 
 RenderUserListInRoom.propTypes = {
+  kickUser: PropTypes.func,
   rooms: PropTypes.object,
   user: PropTypes.object,
 };
@@ -47,4 +62,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps)(RenderUserListInRoom);
+export default connect(mapStateToProps, { kickUser })(RenderUserListInRoom);
