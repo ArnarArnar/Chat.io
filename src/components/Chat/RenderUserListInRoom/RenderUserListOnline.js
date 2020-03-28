@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 
 import PropTypes from 'prop-types';
 
-class RenderUserListOnline extends React.Component {
+class RenderUserListInRoom extends React.Component {
   componentDidMount() {}
 
   userListItems(currentRoom) {
@@ -35,7 +35,7 @@ class RenderUserListOnline extends React.Component {
   }
 }
 
-RenderUserListOnline.propTypes = {
+RenderUserListInRoom.propTypes = {
   rooms: PropTypes.object,
   user: PropTypes.object,
 };
@@ -47,4 +47,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps)(RenderUserListOnline);
+export default connect(mapStateToProps)(RenderUserListInRoom);
