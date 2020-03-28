@@ -1,8 +1,6 @@
 import {
   CREATE_USER,
   UPDATE_USER_LIST,
-  GET_ROOM_LIST,
-  //JOIN_ROOM,
   USER_JOINS_ROOM,
   USER_JOIN_SUCCESS,
   USER_LEFT_SUCCESS,
@@ -34,23 +32,6 @@ const addUserSuccess = (userName) => {
     payload: userName,
   };
 };
-
-// export const getUserList = () =>  (dispatchEvent) => {
-//   try {
-//     //console.log('actions > getUserList: before');
-//     const allUsers = await socketService.getUserList();
-//     //console.log('actions > getUserList: after', allUsers);
-//     dispatchEvent(getUserListSuccess(allUsers));
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// export const updateUserList = () =>  (dispatchEvent) => {
-//     dispatchEvent(updateUserList(userList));
-// };
-
-// socketService.getUserList();
 
 export const updateUserList = (userList) => {
   return {
@@ -110,22 +91,6 @@ export const updateChat = (room, messageHistory) => {
     },
   };
 };
-
-export const getRoomList = () => async (dispatchEvent) => {
-  try {
-    //console.log('actions > getRoomList');
-    const allRooms = await socketService.getRoomList();
-    // console.log('actions > getRoomList: ', allRooms);
-    dispatchEvent(getRoomListSuccess(allRooms));
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-const getRoomListSuccess = (roomList) => ({
-  type: GET_ROOM_LIST,
-  payload: roomList,
-});
 
 // TODO
 export const createRoom = (roomName) => async (dispatchEvent) => {

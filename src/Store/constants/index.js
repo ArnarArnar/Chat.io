@@ -1,7 +1,7 @@
 export const CREATE_USER = 'CREATE_USER';
 export const UPDATE_USER_LIST = 'UPDATE_USER_LIST';
 //export const DISCONNECT_USER = 'DISCONNECT_USER';
-export const GET_ROOM_LIST = 'GET_ROOM_LIST';
+//export const GET_ROOM_LIST = 'GET_ROOM_LIST';
 export const CREATE_ROOM = 'CREATE_ROOM';
 export const USER_JOINS_ROOM = 'USER_JOINS_ROOM';
 export const USER_JOIN_SUCCESS = 'USER_JOIN_SUCCESS';

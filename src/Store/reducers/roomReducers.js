@@ -1,5 +1,5 @@
 import {
-  GET_ROOM_LIST,
+  //GET_ROOM_LIST,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
   USER_JOINS_ROOM,
@@ -15,8 +15,8 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case GET_ROOM_LIST:
-      return { ...state, ...action.payload };
+    // case GET_ROOM_LIST:
+    //   return { ...state, ...action.payload };
     case UPDATE_ROOM_INFO:
       console.log('UPDATE_ROOM_INFO ops', action.payload.ops);
       console.log('UPDATE_ROOM_INFO user', action.payload.ops);

@@ -7,12 +7,11 @@ import Row from 'react-bootstrap/Row';
 
 import PropTypes from 'prop-types';
 
-import { getRoomList } from '../../../Store/actions';
 import socketService from '../../../services/socketService';
 import RenderUsersOnline from '../RenderUserListOnline/RenderUserListOnline';
 import ChatWindow from '../../Chat/ChatWindow/ChatWindow';
 import CreateRoomFrom from '../LobbyForm/LobbyForm';
-import RenderUserListInRoom from '../../Chat/RenderUserListInRoom/RenderUserListOnline';
+import RenderUserListInRoom from '../../Chat/RenderUserListInRoom/RenderUserListInRoom';
 import RenderRoomsAvailable from '../RenderRoomsAvailable/RenderRoomsAvailable';
 
 class Lobby extends React.Component {
@@ -22,10 +21,6 @@ class Lobby extends React.Component {
       hasJoinedRoom: false,
     };
   }
-
-  // componentDidMount() {
-  //   this.props.getUserList();
-  // }
 
   leaveRoom(e) {
     e.preventDefault();
@@ -82,8 +77,6 @@ class Lobby extends React.Component {
 }
 
 Lobby.propTypes = {
-  //getUserList: PropTypes.func,
-  getRoomList: PropTypes.func,
   leaveRoom: PropTypes.func,
   currentRoom: PropTypes.object,
   rooms: PropTypes.object,
@@ -98,4 +91,4 @@ const mapStateToProps = (reduxStoreState) => {
   };
 };
 
-export default connect(mapStateToProps, { getRoomList })(Lobby);
+export default connect(mapStateToProps)(Lobby);

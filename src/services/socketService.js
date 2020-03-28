@@ -12,12 +12,6 @@ import {
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
 
-  socket.on('userlist', (userList) => {
-    console.log('::::Update usersList:::::');
-    console.log('updateUserList > userList', userList);
-    store.dispatch(updateUserList(userList));
-  });
-
   socket.on('updateusers', (room, users, ops) => {
     console.log('::::Update users:::::');
     console.log('updateusers > room', room);
@@ -79,6 +73,11 @@ const socketService = () => {
   const getUpdatedUserList = () => {
     console.log('socketService > getUpdatedUserList');
     socket.emit('users');
+    socket.on('userlist', (userList) => {
+      console.log('::::Update usersList:::::');
+      console.log('updateUserList > userList', userList);
+      store.dispatch(updateUserList(userList));
+    });
   };
 
   const getRoomList = async () => {
@@ -107,22 +106,12 @@ const socketService = () => {
     socket.emit('partroom', roomName);
   };
 
-  // // Help function to make sure the Redux store is the single
-  // // source of truth
-  // const currentRoom = (userName, roomList) => {
-  //   // go through all rooms, check what room he is in,
-  //   // return that room name
-
-  //}
-
   return {
     socket,
     addUser,
     getUpdatedUserList,
-    //disconnect,
     getRoomList,
     joinRoom,
-    //listenForChanges,
     leaveRoom,
     updateChat,
   };
