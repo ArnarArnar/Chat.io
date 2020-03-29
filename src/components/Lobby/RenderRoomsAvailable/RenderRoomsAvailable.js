@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import PropTypes from 'prop-types';
-import Alert from 'react-bootstrap/Alert';
+//import Modal from 'react-bootstrap/Modal';
 import { joinRoom } from '../../../Store/actions';
 
 const RenderRoomsAvailable = (props) => {
-  // TODO: Move this to parent component
   const joinRoom = async (e) => {
     e.preventDefault(e);
-    const success = await props.joinRoom({
+
+    console.log('joinRoom > PROPS.joinRoom', props.joinRoom);
+    const cb = await props.joinRoom({
       room: e.target.innerText,
     });
-    // TODO: test to see if it works
-    if (success !== undefined) {
-      console.log('Join room no successful: ', success);
-      return <Alert color="primary">{success.reason}</Alert>;
+    console.log('RenderRoomsAvailable > joinRoom > cb', cb);
+    if (!cb.success) {
+      alert(cb.reason);
     }
   };
 

@@ -1,11 +1,11 @@
-import createUserReducer from './createUserReducer';
-import getUserListReducer from './getUserListReducer';
-import getRoomListReducer from './roomReducers';
+import currentUserReducer from './currentUserReducer';
+import usersOnlineReducer from './usersOnlineReducer';
+import roomReducers from './roomReducers';
 
 import { combineReducers } from 'redux';
 
 export default combineReducers({
-  user: createUserReducer,
-  userList: getUserListReducer,
-  rooms: getRoomListReducer,
+  user: currentUserReducer,
+  userList: usersOnlineReducer,
+  rooms: roomReducers,
 });

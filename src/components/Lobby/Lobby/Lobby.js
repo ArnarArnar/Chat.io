@@ -18,14 +18,14 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasJoinedRoom: false,
+      // hasJoinedRoom: false,
     };
   }
 
   leaveRoom(e) {
     e.preventDefault();
     const { room } = this.props.user;
-    console.log('leave room', room);
+    console.log('Lobby > leave room', room);
     socketService.leaveRoom(room);
   }
 

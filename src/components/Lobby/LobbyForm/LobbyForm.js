@@ -23,7 +23,7 @@ class RoomForm extends React.Component {
       if (roomName.indexOf(' ') > 0) {
         this.setState(
           {
-            roomNameError: 'Room name cannot spaces',
+            roomNameError: 'Room name cannot contain spaces',
             isEnabled: false,
           },
           () => {
