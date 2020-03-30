@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+//import { Redirect } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import PropTypes from 'prop-types';
@@ -8,6 +9,7 @@ import { joinRoom } from '../../../Store/actions';
 
 const RenderRoomsAvailable = (props) => {
   const joinRoom = async (e) => {
+    const { room } = props.user;
     e.preventDefault(e);
 
     console.log('joinRoom > PROPS.joinRoom', props.joinRoom);
@@ -18,6 +20,8 @@ const RenderRoomsAvailable = (props) => {
     if (!cb.success) {
       alert(cb.reason);
     }
+    console.log('`/room/${room}`', `/room/${room}`);
+    //return <Redirect to={{ pathname: `/room/${room}` }} />;
   };
 
   console.log('RoomsAvailable', props.rooms);
@@ -39,12 +43,14 @@ const RenderRoomsAvailable = (props) => {
 
 RenderRoomsAvailable.propTypes = {
   rooms: PropTypes.object,
+  user: PropTypes.object,
   joinRoom: PropTypes.func,
 };
 
 const mapStateToProps = (reduxStoreState) => {
   return {
     rooms: reduxStoreState.rooms,
+    user: reduxStoreState.user,
   };
 };
 
