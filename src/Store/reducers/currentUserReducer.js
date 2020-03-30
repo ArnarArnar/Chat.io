@@ -10,12 +10,14 @@ import {
 
 const initialState = {
   user: '',
+  room: '',
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case CREATE_USER:
       return {
+        ...state,
         user: action.payload,
       };
     case USER_JOIN_SUCCESS:
@@ -31,17 +33,17 @@ export default function (state = initialState, action) {
     case USER_KICKED_SUCCESS:
       return {
         user: action.payload.user,
-        room: action.payload.room,
+        room: '',
       };
     case USER_BANNED_SUCCESS:
       return {
         user: action.payload.user,
-        room: action.payload.room,
+        room: '',
       };
     case USER_DISCONNECTED_SUCCESS:
       return {
-        user: action.payload.user,
-        room: action.payload.room,
+        user: '',
+        room: '',
       };
     // case USER_PROMOTED_SUCCESS:
     //   return {

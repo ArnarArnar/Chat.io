@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import LogIn from './components/LogIn/LogIn/LogIn.js';
@@ -8,8 +7,12 @@ import Lobby from './components/Lobby/Lobby/Lobby';
 import Room from './components/Room/Room/Room';
 import NotFound from './components/NotFound';
 
+import { store } from './index';
 class App extends React.Component {
   render() {
+    if (store.getState().user.user === '') {
+      <Route render={() => <Redirect to="/" />} />;
+    }
     return (
       <div>
         <Header />
@@ -27,12 +30,4 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (reduxStoreState) => {
-  return {
-    user: reduxStoreState.user,
-    rooms: reduxStoreState.rooms,
-  };
-};
-
-export default connect(mapStateToProps)(App);
-//export default App;
+export default App;

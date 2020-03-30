@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addUser } from '../../../Store/actions';
 import PropTypes from 'prop-types';
@@ -66,10 +66,7 @@ class LogInForm extends React.Component {
 
   render() {
     const { userName } = this.state;
-    const { user } = this.props.user;
-    if (user !== '') {
-      return <Redirect to="/lobby" />;
-    }
+
     return (
       <Form>
         <Row>

@@ -12,8 +12,13 @@ import RenderRoomsAvailable from '../RenderRoomsAvailable/RenderRoomsAvailable';
 
 class Lobby extends React.Component {
   render() {
-    if (this.props.user.room !== undefined && this.props.user.room !== '') {
+    console.log('LOBBY');
+    console.log('this.props.user.room', this.props.user.room);
+    if (this.props.user.room !== '') {
+      console.log('Lobby > this.props.user.room is undefined');
       return <Redirect to={{ pathname: `/room/${this.props.user.room}` }} />;
+    } else if (this.props.user.user === '') {
+      return <Redirect to={{ pathname: '/' }} />;
     }
     return (
       <Card>

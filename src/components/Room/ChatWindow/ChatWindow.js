@@ -47,9 +47,8 @@ class ChatWindow extends React.Component {
     console.log('rooms', rooms);
     console.log('room', room);
 
-    const messagesInRoom = rooms[room].messageHistory;
-
-    if (messagesInRoom) {
+    if (room) {
+      const messagesInRoom = rooms[room].messageHistory;
       return (
         <>
           {messagesInRoom.map((message) => (

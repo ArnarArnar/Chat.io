@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -24,8 +25,13 @@ class Room extends React.Component {
   render() {
     const { room } = this.props.user;
     const { rooms } = this.props;
-    console.log('ROOMS', rooms);
-    console.log('rooms', Object.keys(rooms), 'room', room);
+    console.log('Room > ROOMS====================================', rooms);
+    console.log('room', room);
+    if (this.props.user.room === '') {
+      //console.log('Lobby > this.props.user.room is undefined');
+      console.log('`/room/${room}`', `/room/${room}`);
+      return <Redirect to={{ pathname: `/lobby` }} />;
+    }
     return (
       <Card>
         <Card.Header as="h5">
