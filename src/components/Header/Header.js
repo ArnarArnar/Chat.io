@@ -1,10 +1,7 @@
 import React from 'react';
-
-import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
-//import signOut from '../LogIn/LogIn/LogIn';
 import PropTypes from 'prop-types';
 import socketService from '../../services/socketService';
+import { Button, Navbar } from 'react-bootstrap';
 
 const Header = ({ userName }) => {
   const signUserOut = (e) => {

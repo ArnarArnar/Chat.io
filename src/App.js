@@ -15,7 +15,7 @@ class App extends React.Component {
     }
     return (
       <div>
-        <Header />
+        <Header userName={name} />
         <div className="container">
           <Switch>
             <Route exact path="/" render={() => <LogIn />} />

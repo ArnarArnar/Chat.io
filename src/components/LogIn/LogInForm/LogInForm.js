@@ -1,13 +1,9 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-// import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addUser } from '../../../Store/actions';
 import PropTypes from 'prop-types';
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Col, Row, Button, Form } from 'react-bootstrap';
 
 class LogInForm extends React.Component {
   constructor(props) {
@@ -66,7 +62,6 @@ class LogInForm extends React.Component {
 
   render() {
     const { userName } = this.state;
-
     return (
       <Form>
         <Row>
@@ -122,13 +117,11 @@ const buttonStyle = {
 LogInForm.propTypes = {
   addUser: PropTypes.func,
   userName: PropTypes.string,
-  user: PropTypes.any,
 };
 
 const mapStateToProps = (reduxStoreState) => {
   return {
     rooms: reduxStoreState.rooms,
-    user: reduxStoreState.user,
   };
 };
 
