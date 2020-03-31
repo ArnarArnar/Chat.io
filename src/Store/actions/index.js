@@ -1,15 +1,15 @@
 import {
   CREATE_USER,
-  UPDATE_USER_LIST,
-  USER_JOINS_ROOM,
   USER_JOIN_SUCCESS,
   USER_LEFT_SUCCESS,
   USER_KICKED_SUCCESS,
   USER_BANNED_SUCCESS,
-  //USER_PROMOTED_SUCCESS,
   USER_DISCONNECTED_SUCCESS,
+  GET_ROOM_LIST,
+  USER_JOINS_ROOM,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
+  UPDATE_USER_LIST,
 } from '../constants';
 
 import socketService from '../../services/socketService';
@@ -43,7 +43,6 @@ export const joinRoom = (roomName) => async () => {
   try {
     console.log('actions > joinRoom: ', roomName);
     const cb = await socketService.joinRoom(roomName);
-    console.log('actions > joinRoom > cb', cb);
     return cb;
   } catch (err) {
     throw new Error(err);
@@ -67,19 +66,8 @@ export const userLeftRoomSuccess = (room, user) => {
   return {
     type: USER_LEFT_SUCCESS,
     payload: {
-      room,
-      user,
-    },
-  };
-};
-
-export const userDisconnectSuccess = (room, user) => {
-  console.log('actions > userLeftRoomSuccess: ', room, user);
-  return {
-    type: USER_DISCONNECTED_SUCCESS,
-    payload: {
       room: '',
-      user: '',
+      user,
     },
   };
 };
@@ -98,6 +86,7 @@ export const kickUser = (userName, roomName) => async () => {
   }
 };
 export const userKickedSuccess = (room, user) => {
+  console.log('actions > userKickedSuccess: ', room, user);
   room = '';
   return {
     type: USER_KICKED_SUCCESS,
@@ -122,7 +111,7 @@ export const banUser = (userName, roomName) => async () => {
   }
 };
 export const userBannedSuccess = (room, user) => {
-  room = '';
+  console.log('actions > userBannedSuccess: ', room, user);
   return {
     type: USER_BANNED_SUCCESS,
     payload: {
@@ -146,30 +135,26 @@ export const promoteUserToOp = (userName, roomName) => async () => {
   }
 };
 
-// export const userPromotedSuccess = (room, user) => {
-//   room = '';
-//   return {
-//     type: USER_PROMOTED_SUCCESS,
-//     payload: {
-//       room,
-//       user,
-//     },
-//   };
-// };
-
-// TODO: Remove user success
-
-// BREAK: userList actions
-
-export const updateUserList = (userList) => {
-  console.log('actions > updateUserList: ', userList);
+export const userDisconnectSuccess = (room, user) => {
+  console.log('actions > userLeftRoomSuccess: ', room, user);
   return {
-    type: UPDATE_USER_LIST,
-    payload: userList,
+    type: USER_DISCONNECTED_SUCCESS,
+    payload: {
+      room: '',
+      user: '',
+    },
   };
 };
 
 // BREAK: room actions
+
+export const getRoomListSuccess = (roomList) => {
+  console.log('actions > getRoomListSuccess: ', roomList);
+  return {
+    type: GET_ROOM_LIST,
+    payload: roomList,
+  };
+};
 
 export const userJoinsRoom = (room, user) => {
   console.log('actions > userJoinsRoom: ', room, user);
@@ -202,5 +187,15 @@ export const updateChat = (room, messageHistory) => {
       room,
       messageHistory,
     },
+  };
+};
+
+// BREAK: UsersOnline actions
+
+export const updateUserList = (userList) => {
+  console.log('actions > updateUserList: ', userList);
+  return {
+    type: UPDATE_USER_LIST,
+    payload: userList,
   };
 };

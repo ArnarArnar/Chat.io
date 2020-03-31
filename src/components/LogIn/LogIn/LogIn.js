@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+import PropTypes from 'prop-types';
+import { Jumbotron } from 'react-bootstrap';
+
 import LogInForm from '../LogInForm/LogInForm';
 
 class LogIn extends React.Component {
   render() {
-    const { user } = this.props.user;
+    const { user } = this.props;
     if (user) {
       return <Redirect to="/lobby" />;
     }
@@ -25,7 +26,7 @@ LogIn.propTypes = {
 
 const mapStateToProps = (reduxStoreState) => {
   return {
-    user: reduxStoreState.user,
+    user: reduxStoreState.user.user,
   };
 };
 

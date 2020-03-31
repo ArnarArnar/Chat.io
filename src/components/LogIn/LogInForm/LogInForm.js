@@ -13,22 +13,20 @@ class LogInForm extends React.Component {
       userNameError: null,
       isLoggedIn: false,
       isLoggedInError: null,
+      isEnabled: false,
     };
   }
 
   async logIn(e) {
     e.preventDefault();
     const { userName } = this.state;
+
     const isLoggedIn = await this.props.addUser(userName);
-    console.log('isLoggedIn', isLoggedIn);
     if (!isLoggedIn) {
       {
-        this.setState(
-          { isLoggedInError: 'Unable to log in, username taken' },
-          () => {
-            console.log(this.state.isLoggedInError);
-          }
-        );
+        this.setState({
+          isLoggedInError: 'Unable to log in, username taken',
+        });
       }
     } else {
       this.setState({
@@ -43,25 +41,26 @@ class LogInForm extends React.Component {
     if (e.target.name === 'userName') {
       const userName = e.target.value;
       if (userName.indexOf(' ') > 0) {
-        this.setState({ userNameError: 'Username cannot use spaces' }, () => {
-          console.log(this.state.userNameError);
-        });
+        this.setState({ userNameError: 'Username cannot contain spaces' });
       } else if (!userName.replace(/\s/g, '').length) {
-        this.setState(
-          { userNameError: 'Username cannot only contain whitespace' },
-          () => {
-            console.log(this.state.userNameError);
-          }
-        );
+        this.setState({
+          userNameError: 'Username cannot only contain whitespace',
+          isEnabled: false,
+        });
+      } else if (userName.length > 10) {
+        this.setState({
+          userNameError: 'Username cannot be longer then 10 letters',
+          isEnabled: false,
+        });
       } else {
-        this.setState({ userNameError: null });
+        this.setState({ userNameError: null, isEnabled: true });
       }
     }
     this.setState({ [e.target.name]: e.target.value });
   }
 
   render() {
-    const { userName } = this.state;
+    const { userName, isEnabled } = this.state;
     return (
       <Form>
         <Row>
@@ -98,6 +97,7 @@ class LogInForm extends React.Component {
             <Button
               className="btn-block"
               variant="primary"
+              disabled={!isEnabled}
               type="submit"
               onClick={(e) => this.logIn(e)}
             >
@@ -116,13 +116,6 @@ const buttonStyle = {
 
 LogInForm.propTypes = {
   addUser: PropTypes.func,
-  userName: PropTypes.string,
 };
 
-const mapStateToProps = (reduxStoreState) => {
-  return {
-    rooms: reduxStoreState.rooms,
-  };
-};
-
-export default connect(mapStateToProps, { addUser })(LogInForm);
+export default connect(null, { addUser })(LogInForm);

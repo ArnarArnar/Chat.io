@@ -1,9 +1,9 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import socketService from '../../../services/socketService';
 import PropTypes from 'prop-types';
+import { Form, Button } from 'react-bootstrap';
+
+import socketService from '../../../services/socketService';
 
 class MessageForm extends React.Component {
   constructor(props) {
@@ -16,9 +16,7 @@ class MessageForm extends React.Component {
   sendMessage(e) {
     e.preventDefault();
     const { room } = this.props.user;
-    console.log('testCurrentRoom ', room);
     const { message } = this.state;
-    console.log('ChatWindow > sendMessage', message, 'current room ', room);
     if (message === '') {
       return false;
     }

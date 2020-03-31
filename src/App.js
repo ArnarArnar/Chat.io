@@ -1,21 +1,25 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.css';
+
 import LogIn from './components/LogIn/LogIn/LogIn.js';
 import Header from './components/Header/Header';
 import Lobby from './components/Lobby/Lobby/Lobby';
 import Room from './components/Room/Room/Room';
 import NotFound from './components/NotFound';
 
-import { store } from './index';
+//import { store } from './index';
 class App extends React.Component {
   render() {
-    if (store.getState().user.user === '') {
+    const user = this.props.user;
+    if (user === '') {
       <Route render={() => <Redirect to="/" />} />;
     }
     return (
       <div>
-        <Header userName={name} />
+        <Header userName={user} />
         <div className="container">
           <Switch>
             <Route exact path="/" render={() => <LogIn />} />
@@ -30,4 +34,14 @@ class App extends React.Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  user: PropTypes.string,
+};
+
+const mapStateToProps = (reduxStoreState) => {
+  return {
+    user: reduxStoreState.user.user,
+  };
+};
+
+export default connect(mapStateToProps)(App);

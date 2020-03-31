@@ -1,30 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
-
-import Spinner from 'react-bootstrap/Spinner';
+import SpinnerLoading from '../../SpinnerLoading/SpinnerLoading';
 import { kickUser, banUser, promoteUserToOp } from '../../../Store/actions';
+import RenderUserListItem from '../RenderUserListItem/RenderUserListItem';
 
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
 
 class RenderUserListInRoom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.kick = this.kick.bind(this);
+    this.ban = this.ban.bind(this);
+    this.op = this.op.bind(this);
+  }
   kick(e, user) {
     e.preventDefault(e);
-    console.log('Kick > user', user);
     const { room } = this.props.user;
     this.props.kickUser({ user: Object.values(user).toString(), room: room });
   }
   ban(e, user) {
     e.preventDefault(e);
-    console.log('ban > user', user);
     const { room } = this.props.user;
     this.props.banUser({ user: Object.values(user).toString(), room: room });
   }
   op(e, user) {
     e.preventDefault(e);
-    console.log('op > user', user);
     const { room } = this.props.user;
     this.props.promoteUserToOp({
       user: Object.values(user).toString(),
@@ -35,8 +35,6 @@ class RenderUserListInRoom extends React.Component {
   render() {
     const { rooms } = this.props;
     const { room, user } = this.props.user;
-    console.log('RenderUserListInRoom > rooms', rooms);
-    console.log('RenderUserListInRoom > room', room);
 
     if (room) {
       let users = Object.values(rooms[room].users).map((m) => m);
@@ -54,67 +52,21 @@ class RenderUserListInRoom extends React.Component {
 
       return (
         <>
-          <Card>
-            <Card.Header as="h5">Users in room</Card.Header>
-            <ListGroup>
-              {opsInRoom.map((u) => {
-                return <ListGroup.Item key={u}> {u} Op</ListGroup.Item>;
-              })}
-            </ListGroup>
-            <ListGroup>
-              {nonOpsInRoom.map((u) => {
-                return (
-                  <ListGroup.Item key={u}>
-                    {u}
-                    {isCurrentUserOp ? (
-                      <>
-                        <Button
-                          size="sm"
-                          variant="warning"
-                          id="kick"
-                          onClick={(e) => this.kick(e, { u })}
-                        >
-                          Kick
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="danger"
-                          id="ban"
-                          onClick={(e) => this.ban(e, { u })}
-                        >
-                          Ban
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="info"
-                          id="op"
-                          onClick={(e) => this.op(e, { u })}
-                        >
-                          Op
-                        </Button>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
-          </Card>
+          <RenderUserListItem
+            opsInRoom={opsInRoom}
+            nonOpsInRoom={nonOpsInRoom}
+            isCurrentUserOp={isCurrentUserOp}
+            kick={this.kick}
+            ban={this.ban}
+            op={this.op}
+          />
         </>
       );
     }
     return (
-      <div className="d-flex justify-content-center">
-        <Spinner
-          as="span"
-          animation="grow"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
-        Loading messages...
-      </div>
+      <>
+        <SpinnerLoading />
+      </>
     );
   }
 }
