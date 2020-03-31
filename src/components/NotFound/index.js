@@ -11,8 +11,7 @@ const NotFound = ({ location }) => {
 };
 
 NotFound.propTypes = {
-  location: PropTypes.string,
-  pathname: PropTypes.string,
+  location: PropTypes.object,
 };
 
 export default NotFound;

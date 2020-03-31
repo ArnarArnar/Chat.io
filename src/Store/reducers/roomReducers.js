@@ -1,22 +1,21 @@
 import {
-  //GET_ROOM_LIST,
+  GET_ROOM_LIST,
+  USER_JOINS_ROOM,
   UPDATE_ROOM_INFO,
   UPDATE_CHAT,
-  USER_JOINS_ROOM,
 } from '../constants';
 
 const initialState = {
   lobby: {},
 };
 
-// const getSingleVarName = (roomName) => {
-//   return roomName;
-// };
-
 export default function (state = initialState, action) {
   switch (action.type) {
+    case GET_ROOM_LIST:
+      return {
+        ...action.payload,
+      };
     case USER_JOINS_ROOM:
-      console.log('UPDATE_ROOM_INFO payload', action.payload);
       return {
         ...state,
         [action.payload.room]: {
@@ -49,19 +48,3 @@ export default function (state = initialState, action) {
       return state;
   }
 }
-// rooms
-// {currentRoom: {…}, roomList: {…}, getRoomList: ƒ, joinRoom: ƒ}
-//  currentRoom:
-//      roomName:
-//          room: "lobby"
-//        __proto__: Object
-//      __proto__: Object
-//  roomList:
-//      lobby:
-//          users: {}
-//          ops: {}
-//          banned: {}
-//          messageHistory: [{…}]
-//          topic: "Welcome to the lobby!"
-//          locked: false
-//          password: ""

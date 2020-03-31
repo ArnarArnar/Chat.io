@@ -1,15 +1,13 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
-import { joinRoom } from '../../../Store/actions';
 import PropTypes from 'prop-types';
+import { Button, Form } from 'react-bootstrap';
 
+import { joinRoom } from '../../../Store/actions';
 class RoomForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasJoinedRoom: false,
       roomName: '',
       roomNameError: null,
       isEnabled: false,
@@ -21,36 +19,26 @@ class RoomForm extends React.Component {
     if (e.target.name === 'roomName') {
       const roomName = e.target.value;
       if (roomName.indexOf(' ') > 0) {
-        this.setState(
-          {
-            roomNameError: 'Room name cannot contain spaces',
-            isEnabled: false,
-          },
-          () => {
-            console.log(this.state.roomNameError);
-          }
-        );
+        this.setState({
+          roomNameError: 'Room name cannot contain spaces',
+          isEnabled: false,
+        });
       } else if (!roomName.replace(/\s/g, '').length) {
-        this.setState(
-          {
-            userNameError: 'The room name cannot only contain whitespace',
-            isEnabled: false,
-          },
-          () => {
-            console.log(this.state.roomNameError);
-          }
-        );
+        this.setState({
+          userNameError: 'The room name cannot only contain whitespace',
+          isEnabled: false,
+        });
       } else if (Object.prototype.hasOwnProperty.call(rooms, roomName)) {
-        this.setState(
-          {
-            roomNameError:
-              'A room already has this name, please select another one',
-            isEnabled: false,
-          },
-          () => {
-            console.log(this.state.roomNameError);
-          }
-        );
+        this.setState({
+          roomNameError:
+            'A room already has this name, please select another one',
+          isEnabled: false,
+        });
+      } else if (roomName.length > 10) {
+        this.setState({
+          roomNameError: 'The room name cannot be longer then 10 letters',
+          isEnabled: false,
+        });
       } else {
         this.setState({ roomNameError: null, isEnabled: true });
       }
@@ -61,6 +49,7 @@ class RoomForm extends React.Component {
   async createRoom(e) {
     e.preventDefault();
     const { roomName } = this.state;
+
     this.props.joinRoom({
       room: roomName,
     });
@@ -109,7 +98,6 @@ RoomForm.propTypes = {
 const mapStateToProps = (reduxStoreState) => {
   return {
     rooms: reduxStoreState.rooms,
-    user: reduxStoreState.user,
   };
 };
 

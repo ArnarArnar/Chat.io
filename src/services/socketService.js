@@ -5,67 +5,44 @@ import {
   updateRoomInfo,
   userJoinsRoom,
   updateChat,
+  getRoomListSuccess,
   userJoinRoomSuccess,
   userLeftRoomSuccess,
   userKickedSuccess,
   userBannedSuccess,
   userDisconnectSuccess,
-  // userPromotedSuccess,
 } from '../Store/actions';
 
 const socketService = () => {
   const socket = connectToSocketIOServer('http://localhost:8080');
 
-  socket.on('updateusers', (room, users, ops) => {
-    console.log(
-      '::::updateusers:::::' +
-        'room: ' +
-        room +
-        'users: ' +
-        users +
-        'ops: ' +
-        ops
-    );
-    store.dispatch(updateRoomInfo(room, users, ops));
-  });
+  // BREAK: user reducer actions
 
-  // eslint-disable-next-line no-unused-vars
-  socket.on('updatechat', (room, messageHistory) => {
-    console.log(
-      '::::updatechat:::::' + 'room' + room + 'messageHistory' + messageHistory
-    );
-    store.dispatch(updateChat(room, messageHistory));
-  });
+  const addUser = (userName) => {
+    console.log('socketService > addUser');
+    return new Promise((resolve) => {
+      socket.emit('adduser', userName, function (cb) {
+        if (cb) getRoomList();
+        resolve(cb);
+      });
+    });
+  };
 
   socket.on('servermessage', (event, room, user) => {
-    console.log(
-      '::::servermessage:::::' +
-        ' event: ' +
-        event +
-        ' room: ' +
-        room +
-        ' user: ' +
-        user
-    );
+    console.log('::::servermessage:::::' + ' event: ' + event);
     if (event === 'join') {
-      console.log('servermessage > join');
       store.dispatch(userJoinsRoom(room, user));
       // Instead of having a local state for current room the user has an current room store state that is only controlled by emits from the server.
       // If the current user is the one allowed to join the server then update the user state
       if (user === store.getState().user.user) {
-        console.log('servermessage > userJoinRoomSuccess');
         store.dispatch(userJoinRoomSuccess(room, user));
       }
     } else if (event === 'part') {
-      console.log('servermessage > part');
       if (user === store.getState().user.user) {
-        console.log('userLeftRoomSuccess > userLeftRoomSuccess', user);
         store.dispatch(userLeftRoomSuccess(room, user));
       }
     } else if (event === 'quit') {
-      console.log('servermessage > quit');
       if (user === store.getState().user.user) {
-        console.log('userLeftRoomSuccess > userLeftRoomSuccess', user);
         store.dispatch(userDisconnectSuccess(user));
       }
     } else throw new Error('Unprocessed update from server');
@@ -75,7 +52,6 @@ const socketService = () => {
     console.log('socketService > kickUser');
     return new Promise((resolve) => {
       socket.emit('kick', kickObject, function (success, reason) {
-        console.log('kick', success, reason);
         resolve(success, reason);
       });
     });
@@ -83,9 +59,6 @@ const socketService = () => {
 
   socket.on('kicked', (room, user, ops) => {
     console.log('::::User kicked users:::::');
-    console.log('kicked > room ', room);
-    console.log('kicked > users', user);
-    console.log('kicked > ops  ', ops);
     if (user === store.getState().user.user) {
       console.log('This user has been kicked');
       store.dispatch(userKickedSuccess(room, user, ops));
@@ -93,98 +66,39 @@ const socketService = () => {
   });
 
   const banUser = (banObject) => {
-    console.log('socketService > banUser', banObject);
+    console.log('socketService > banUser');
     return new Promise((resolve) => {
       socket.emit('ban', banObject, function (success, reason) {
-        console.log('ban', success, reason);
         resolve(success, reason);
       });
     });
   };
 
   socket.on('banned', (room, user, ops) => {
-    console.log('::::User banned users:::::');
-    console.log('banned > room ', room);
-    console.log('banned > users', user);
-    console.log('banned > ops  ', ops);
+    console.log('::::banned:::::');
     if (user === store.getState().user.user) {
-      console.log('This user has been kickbanneded');
       store.dispatch(userBannedSuccess(room, user, ops));
     }
   });
 
   const promoteUserToOp = (promoteObject) => {
-    console.log('socketService > promoteUserToOp', promoteObject);
+    console.log('socketService > promoteUserToOp');
     return new Promise((resolve) => {
       socket.emit('op', promoteObject, function (success, reason) {
-        console.log('socketService > promoteUserToOp > cb', success, reason);
         resolve(success, reason);
       });
     });
   };
 
   socket.on('opped', (room, promotedUser, promotingUser) => {
-    console.log('::::User banned users:::::');
+    console.log('::::opped:::::');
     console.log('banned > room ', room);
     console.log('banned > users', promotedUser);
     console.log('banned > ops  ', promotingUser);
     if (promotedUser === store.getState().user.user) {
       console.log('This user has been promoted');
-      // store.dispatch(userPromotedSuccess(room, promotedUser, promotingUser));
     }
   });
-
-  // eslint-disable-next-line no-unused-vars
-  socket.on('updatetopic', (room, topic, user) => {
-    // console.log('::::Update topic:::::');
-    // console.log('Event', event);
-    // console.log('room', room);
-    // console.log('users', user);
-  });
-
-  const addUser = (userName) => {
-    //console.log('====================socket', socket);
-    //console.log('socketService > addUser', userName);
-
-    return new Promise((resolve) => {
-      socket.emit('adduser', userName, function (data) {
-        console.log('Callback from addUser socket service', data);
-        resolve(data);
-      });
-    });
-  };
-
-  const getUpdatedUserList = () => {
-    console.log('socketService > getUpdatedUserList');
-    socket.emit('users');
-    socket.on('userlist', (userList) => {
-      console.log('::::Update usersList:::::');
-      console.log('updateUserList > userList', userList);
-      store.dispatch(updateUserList(userList));
-    });
-  };
-
-  const getRoomList = async () => {
-    //console.log('socketService > getRoomList');
-    socket.emit('rooms');
-    return new Promise((resolve) => {
-      socket.on('roomlist', function (data) {
-        //console.log('socketService > getRoomList', data);
-        resolve(data);
-      });
-    });
-  };
-
-  const joinRoom = (roomName) => {
-    //console.log('socketService > getUserList');
-    return new Promise((resolve) => {
-      socket.emit('joinroom', roomName, function (success, reason) {
-        console.log('joinroom', success, reason);
-        //{response: { success: success, reason: reason}
-        resolve({ success, reason });
-      });
-    });
-  };
 
   const leaveRoom = (roomName) => {
     console.log('socketService > leaveRoom', roomName);
@@ -196,10 +110,59 @@ const socketService = () => {
     socket.emit('manualdisconnect');
   };
 
+  // BREAK: Room actions
+
+  const joinRoom = (roomName) => {
+    console.log('socketService > joinRoom');
+    return new Promise((resolve) => {
+      socket.emit('joinroom', roomName, function (success, reason) {
+        console.log('joinroom', success, reason);
+        resolve({ success, reason });
+      });
+    });
+  };
+
+  socket.on('updateusers', (room, users, ops) => {
+    console.log('::::updateusers::::');
+    store.dispatch(updateRoomInfo(room, users, ops));
+  });
+
+  socket.on('updatechat', (room, messageHistory) => {
+    console.log('::::updatechat:::::');
+    store.dispatch(updateChat(room, messageHistory));
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  socket.on('updatetopic', (room, topic, user) => {
+    // console.log('::::Update topic:::::');
+    // console.log('Event', event);
+    // console.log('room', room);
+    // console.log('users', user);
+  });
+
+  const getRoomList = () => {
+    console.log('socketService > getRoomList');
+    socket.emit('rooms');
+    socket.on('roomlist', (data) => {
+      console.log('::::roomlist::::');
+      store.dispatch(getRoomListSuccess(data));
+    });
+  };
+
+  // BREAK: Users online actions
+
+  const getUpdatedUserList = () => {
+    console.log('socketService > getUpdatedUserList');
+    socket.emit('users');
+    socket.on('userlist', (userList) => {
+      console.log('::::userlist::::');
+      store.dispatch(updateUserList(userList));
+    });
+  };
+
   return {
     socket,
     addUser,
-    getUpdatedUserList,
     getRoomList,
     joinRoom,
     kickUser,
@@ -208,6 +171,7 @@ const socketService = () => {
     leaveRoom,
     signOut,
     updateChat,
+    getUpdatedUserList,
   };
 };
 

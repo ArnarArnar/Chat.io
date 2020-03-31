@@ -4,7 +4,6 @@ import {
   USER_LEFT_SUCCESS,
   USER_KICKED_SUCCESS,
   USER_BANNED_SUCCESS,
-  //USER_PROMOTED_SUCCESS,
   USER_DISCONNECTED_SUCCESS,
 } from '../constants';
 
@@ -14,6 +13,9 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
+  if (typeof state === 'undefined') {
+    return initialState;
+  }
   switch (action.type) {
     case CREATE_USER:
       return {
@@ -45,11 +47,6 @@ export default function (state = initialState, action) {
         user: '',
         room: '',
       };
-    // case USER_PROMOTED_SUCCESS:
-    //   return {
-    //     user: action.payload.user,
-    //     room: action.payload.room,
-    //   };
     default:
       return state;
   }
