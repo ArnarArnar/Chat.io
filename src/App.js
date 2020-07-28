@@ -11,7 +11,6 @@ import Room from './components/Room/Room/Room';
 import PrivateChat from './components/PrivateChat/PrivateChatContainer/PrivateChat';
 import NotFound from './components/NotFound';
 
-//import { store } from './index';
 class App extends React.Component {
   render() {
     const user = this.props.user;
