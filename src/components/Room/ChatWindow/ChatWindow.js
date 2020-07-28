@@ -8,23 +8,17 @@ import MessageForm from '../MessageForm/MessageForm';
 import SpinnerLoading from '../../SpinnerLoading/SpinnerLoading';
 import RenderMessages from '../RenderMessages/RenderMessages';
 class ChatWindow extends React.Component {
-  constructor(props) {
-    super(props);
-    //this.divRef = React.createRef();
+  componentDidMount() {
+    if (document.getElementById('message-window')) {
+      document.getElementById('message-window').scrollTo(0, 10000);
+    }
   }
 
-  // componentDidMount() {
-  //   this.scrollToBottom();
-  // }
-
-  // componentDidUpdate() {
-  //   this.scrollToBottom();
-  // }
-  // scrollToBottom() {
-  //   setInterval(() => {
-  //     this.divRef.current.scrollIntoView({ behavior: 'smooth' });
-  //   }, 500);
-  // }
+  componentDidUpdate() {
+    if (document.getElementById('message-window')) {
+      document.getElementById('message-window').scrollTo(0, 10000);
+    }
+  }
 
   render() {
     const { room } = this.props.user;
@@ -32,16 +26,12 @@ class ChatWindow extends React.Component {
     return (
       <Row>
         <Col>
-          <Container>
+          <Container className="pb-3">
             <div
-              className="list-group"
+              id="message-window"
+              className="list-group d-flex"
               variant="bottom"
-              ref={this.divRef}
-              style={{
-                marginBottom: '60px',
-                height: '50vh',
-                overflowX: 'hidden',
-              }}
+              style={renderListStyle}
             >
               {room ? (
                 <RenderMessages rooms={rooms} room={room} />
@@ -56,6 +46,11 @@ class ChatWindow extends React.Component {
     );
   }
 }
+
+const renderListStyle = {
+  height: '70vh',
+  overflowX: 'hidden',
+};
 
 ChatWindow.propTypes = {
   user: PropTypes.object,

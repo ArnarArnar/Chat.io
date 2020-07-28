@@ -6,7 +6,12 @@ import { Card, ListGroup } from 'react-bootstrap';
 const RenderUsersOnline = (props) => {
   return (
     <>
-      <Card>
+      <Card
+        id="message-window"
+        className="list-group d-flex"
+        variant="bottom"
+        style={renderListStyle}
+      >
         <Card.Header as="h5">Users online</Card.Header>
         <ListGroup>
           {props.userList.map((userList) => {
@@ -16,6 +21,11 @@ const RenderUsersOnline = (props) => {
       </Card>
     </>
   );
+};
+
+const renderListStyle = {
+  height: '70vh',
+  overflowX: 'hidden',
 };
 
 RenderUsersOnline.propTypes = {

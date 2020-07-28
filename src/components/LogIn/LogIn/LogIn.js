@@ -14,6 +14,8 @@ class LogIn extends React.Component {
     }
     return (
       <Jumbotron>
+        <h1>Welcome to Chat.io</h1>
+        <br />
         <LogInForm />
       </Jumbotron>
     );

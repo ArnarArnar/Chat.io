@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const RenderMessages = ({ rooms, room }) => {
-  if (room) {
-    const messagesInRoom = rooms[room].messageHistory;
+  const messagesInRoom = rooms[room].messageHistory;
+  if (messagesInRoom.length >= 1) {
     return (
       <>
         {messagesInRoom.map((message) => (
@@ -16,7 +16,12 @@ const RenderMessages = ({ rooms, room }) => {
       </>
     );
   }
-  return <strong>No messages...</strong>;
+  return (
+    <>
+      <br></br>
+      <p className="text-center">No messages in the room</p>
+    </>
+  );
 };
 
 RenderMessages.propTypes = {

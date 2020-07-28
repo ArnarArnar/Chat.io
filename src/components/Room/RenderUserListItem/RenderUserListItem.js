@@ -11,20 +11,25 @@ const RenderUserListItem = ({
   op,
 }) => {
   return (
-    <Card>
+    <Card
+      id="message-window"
+      className="list-group d-flex pb-3"
+      variant="bottom"
+      style={renderListStyle}
+    >
       <Card.Header as="h5">Users in room</Card.Header>
       <ListGroup>
         {opsInRoom.map((u) => {
-          return <ListGroup.Item key={u}> {u} Op</ListGroup.Item>;
+          return <ListGroup.Item key={u}> {u} - Admin</ListGroup.Item>;
         })}
       </ListGroup>
       <ListGroup>
         {nonOpsInRoom.map((u) => {
           return (
-            <ListGroup.Item key={u}>
+            <ListGroup.Item key={u} className="d-flex justify-content-between">
               {u}
               {isCurrentUserOp ? (
-                <>
+                <span>
                   <Button
                     size="sm"
                     variant="warning"
@@ -49,7 +54,7 @@ const RenderUserListItem = ({
                   >
                     Op
                   </Button>
-                </>
+                </span>
               ) : (
                 <></>
               )}
@@ -59,6 +64,11 @@ const RenderUserListItem = ({
       </ListGroup>
     </Card>
   );
+};
+
+const renderListStyle = {
+  height: '70vh',
+  overflowX: 'hidden',
 };
 
 RenderUserListItem.propTypes = {

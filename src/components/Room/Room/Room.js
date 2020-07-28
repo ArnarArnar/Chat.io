@@ -22,12 +22,12 @@ class Room extends React.Component {
     }
     return (
       <Card>
-        <Card.Header as="h5">
+        <Card.Header as="h5" className="mb-3">
           <Row>
             <Col>Current room is {room}</Col>
-            <Col>
+            <Col sm={4}>
               <Button
-                className="float-right"
+                className="float-right btn-sm btn-block"
                 variant="secondary"
                 type="submit"
                 onClick={(e) => this.leaveRoom(e)}
@@ -36,15 +36,15 @@ class Room extends React.Component {
               </Button>
             </Col>
           </Row>
-          <Row>
-            <Col sm={8}>
-              <ChatWindow />
-            </Col>
-            <Col sm={4}>
-              <RenderUserListInRoom />
-            </Col>
-          </Row>
         </Card.Header>
+        <Row className="mr-1">
+          <Col sm={8}>
+            <ChatWindow />
+          </Col>
+          <Col sm={4}>
+            <RenderUserListInRoom />
+          </Col>
+        </Row>
       </Card>
     );
   }

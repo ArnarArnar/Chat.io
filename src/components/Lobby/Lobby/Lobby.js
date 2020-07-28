@@ -17,9 +17,12 @@ class Lobby extends React.Component {
       return <Redirect to={{ pathname: '/' }} />;
     }
     return (
-      <Card>
+      <Card className="p-3">
         <Row>
-          <Col sm={8}>
+          <Col
+            sm={8}
+            className="d-flex justify-content-between flex-column align-content-center pr-0"
+          >
             <RenderRoomsAvailable />
             <CreateRoomFrom />
           </Col>

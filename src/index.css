@@ -1,0 +1,9 @@
+body {
+  font-family: 'Sintony',
+    sans-serif;
+}
+
+#message-window {
+  height: '70vh';
+  overflow-x: hidden;
+}
