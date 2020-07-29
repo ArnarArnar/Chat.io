@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 
 import { joinRoom } from '../../../Store/actions';
 class RoomForm extends React.Component {
@@ -60,31 +60,41 @@ class RoomForm extends React.Component {
     const roomName = this.state.user;
     const { isEnabled } = this.state;
     return (
-      <Form>
-        <Form.Group controlId="form-room-name">
-          <Form.Label>Create new room</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            name="roomName"
-            value={roomName}
-            placeholder="Enter a name for a new chat room"
-            onChange={(e) => this.onChange(e)}
-          />
-          {this.state.roomNameError !== null && (
-            <Form.Control.Feedback style={{ display: 'block' }} type="invalid">
-              {this.state.roomNameError}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={!isEnabled}
-          onClick={(e) => this.createRoom(e)}
-        >
-          Create room
-        </Button>
+      <Form className="mb-0 pb-0">
+        <Form.Label>Create new room</Form.Label>
+        <Row>
+          <Col xs={12} md={8}>
+            <Form.Group controlId="form-room-name" className="mb-0">
+              <Form.Control
+                required
+                type="text"
+                name="roomName"
+                value={roomName}
+                placeholder="Enter a name for a new chat room"
+                onChange={(e) => this.onChange(e)}
+              />
+              {this.state.roomNameError !== null && (
+                <Form.Control.Feedback
+                  style={{ display: 'block' }}
+                  type="invalid"
+                >
+                  {this.state.roomNameError}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
+          <Col xs={6} md={4}>
+            <Button
+              className="btn-block mb-0"
+              variant="primary"
+              type="submit"
+              disabled={!isEnabled}
+              onClick={(e) => this.createRoom(e)}
+            >
+              Create room
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }

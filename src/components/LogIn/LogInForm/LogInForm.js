@@ -63,10 +63,10 @@ class LogInForm extends React.Component {
     const { userName, isEnabled } = this.state;
     return (
       <Form>
+        <Form.Label as="h5">Create a username</Form.Label>
         <Row>
           <Col xs={12} md={8}>
-            <Form.Group controlId="form-user-name" className="align-self-end">
-              <Form.Label as="h5">Create a username</Form.Label>
+            <Form.Group controlId="form-user-name">
               <Form.Control
                 required
                 type="text"
@@ -93,7 +93,7 @@ class LogInForm extends React.Component {
               )}
             </Form.Group>
           </Col>
-          <Col xs={6} md={4} className="align-self-end" style={buttonStyle}>
+          <Col xs={6} md={4}>
             <Button
               className="btn-block"
               variant="primary"
@@ -109,10 +109,6 @@ class LogInForm extends React.Component {
     );
   }
 }
-
-const buttonStyle = {
-  paddingBottom: '16px',
-};
 
 LogInForm.propTypes = {
   addUser: PropTypes.func,

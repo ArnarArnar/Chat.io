@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import allReducers from './Store/reducers';
 import { Provider } from 'react-redux';
+import './index.css';
 
 //import * as serviceWorker from './serviceWorker';
 
