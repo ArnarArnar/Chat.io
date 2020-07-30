@@ -4,6 +4,8 @@
 
 Chat.io was a individual final project in Web Programming 2. Given a server we were tasked with creating an front end for a IRC like chat application where users are able to join chatroom's or message privately. Communication with the server is facilitated by socket.io and all routing is controlled by the Redux global state. The structure and webpack was configured without the help of the 'create-react-app' scaffolding tool.
 
+##### Built using React, Redux, Socket.io & Bootstrap.
+
 #### [Assignment Description](/Assignment-description-chatio.pdf)
 
 ## Installation
