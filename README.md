@@ -2,6 +2,8 @@
 
 # Chat.io
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c2043057c7f64f23b332ee4be73736f0)](https://app.codacy.com/manual/ArnarArnar/Chat.io?utm_source=github.com&utm_medium=referral&utm_content=ArnarArnar/Chat.io&utm_campaign=Badge_Grade_Dashboard)
+
 Chat.io was a individual final project in Web Programming 2. Given a server we were tasked with creating an front end for a IRC like chat application where users are able to join chatroom's or message privately. Communication with the server is facilitated by socket.io and all routing is controlled by the Redux global state. The structure and webpack was configured without the help of the 'create-react-app' scaffolding tool.
 
 **Built using React, Redux, Socket.io & Bootstrap**
