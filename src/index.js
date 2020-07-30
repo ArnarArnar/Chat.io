@@ -8,8 +8,6 @@ import allReducers from './Store/reducers';
 import { Provider } from 'react-redux';
 import './index.css';
 
-//import * as serviceWorker from './serviceWorker';
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
@@ -24,5 +22,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-// ReactDOM.render(<App />, document.getElementById('root'));
