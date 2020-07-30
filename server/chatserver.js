@@ -405,17 +405,17 @@ io.on("connection", function(socket) {
 //Define the Room class/object.
 function Room() {
   (this.users = {}),
-    (this.ops = {}),
-    (this.banned = {}),
-    (this.messageHistory = []),
-    (this.topic = "No topic has been set for room.."),
-    (this.locked = false),
-    (this.password = ""),
-    (this.addUser = function(user) {
-      user !== undefined
-        ? (this.users[user] = user)
-        : console.log("ERROR: add user");
-    });
+  (this.ops = {}),
+  (this.banned = {}),
+  (this.messageHistory = []),
+  (this.topic = "No topic has been set for room.."),
+  (this.locked = false),
+  (this.password = ""),
+  (this.addUser = function(user) {
+    user !== undefined
+      ? (this.users[user] = user)
+      : console.log("ERROR: add user");
+  });
   this.banUser = function(user) {
     user !== undefined
       ? (this.banned[user] = user)
