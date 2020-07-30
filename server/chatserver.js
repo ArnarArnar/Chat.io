@@ -17,11 +17,8 @@ rooms.lobby = new Room();
 rooms.lobby.setTopic("Welcome to the lobby!");
 
 io.on("connection", function(socket) {
-  //console.log(socket);
-  console.log("New client id", socket.id);
   //This gets performed when a user joins the server.
   socket.on("adduser", function(username, fn) {
-    console.log("Comes to addUser", username);
     //Check if username is avaliable.
     if (
       users[username] === undefined &&
@@ -44,8 +41,6 @@ io.on("connection", function(socket) {
 
   //When a user joins a room this processes the request.
   socket.on("joinroom", function(joinObj, fn) {
-    console.log("joinroom(JoinObj)", joinObj, fn);
-    console.log("joinroom(JoinObj).room", joinObj.room, fn);
     var room = joinObj.room;
     var pass = joinObj.pass;
     var accepted = true;
@@ -53,7 +48,6 @@ io.on("connection", function(socket) {
 
     //If the room does not exist
     if (rooms[room] === undefined) {
-      //console.log("joinroom->if (rooms[room] === undefined)");
       rooms[room] = new Room();
       //Op the user if he creates the room.
       rooms[room].ops[socket.username] = socket.username;
@@ -70,17 +64,12 @@ io.on("connection", function(socket) {
       socket.emit("updatetopic", room, rooms[room].topic, socket.username);
       //=================REMOVED===io.sockets.emit("servermessage", "join", room, socket.username);
     } else {
-      // console.log("joinroom->if (rooms[room] !== undefined");
       //If the room isn't locked we set accepted to true.
       if (rooms[room].locked === false) {
-        // console.log(
-        //   "joinroom->if (rooms[room] !== undefined-> rooms[room].locked === false"
-        //);
         accepted = true;
       }
       //Check if user submits the correct password
       else {
-        // console.log("joinroom->if (rooms[room] !== undefined-> rooms[room].locked !== false");
         //If it doesnt match we set accepted to false.
         if (pass != rooms[room].password) {
           accepted = false;
@@ -90,18 +79,11 @@ io.on("connection", function(socket) {
 
       //Check if the user has been added to the ban list.
       if (rooms[room].banned[socket.username] !== undefined) {
-        console.log(
-          "joinroom->if (rooms[room] !== undefined-> if (rooms[room].banned[socket.username] !== undefined)"
-        );
         accepted = false;
         reason = "banned";
       }
       //If accepted is set to true at this point the user is allowed to join the room.
       if (accepted) {
-        console.log(
-          "joinroom->if (accepted) ========USER ADDED TO ROOM",
-          socket.username
-        );
         //We need to let the server know beforehand so that he starts to prepare the client template.
         fn(true);
         //Add user to room.
@@ -125,14 +107,10 @@ io.on("connection", function(socket) {
 
   // when the client emits 'sendchat', this listens and executes
   socket.on("sendmsg", function(data) {
-    console.log("sendmsg > socket.username", socket.username);
-    console.log("sendmsg > rooms[data.roomName]", rooms[data.roomName]);
-    console.log("sendmsg", data.msg);
     var userAllowed = false;
 
     //Check if user is allowed to send message.
     if (rooms[data.roomName].users[socket.username] !== undefined) {
-      console.log("sendmsg > userAllowed");
       userAllowed = true;
     }
     if (rooms[data.roomName].ops[socket.username] !== undefined) {
@@ -156,7 +134,6 @@ io.on("connection", function(socket) {
   });
 
   socket.on("privatemsg", function(msgObj, fn) {
-    console.log("privatemsg. msgObj ", msgObj, " fn ", fn);
     //If user exists in global user list.
     if (users[msgObj.nick] !== undefined) {
       //Send the message only to this user.
@@ -173,7 +150,6 @@ io.on("connection", function(socket) {
 
   //When a user leaves a room this gets performed.
   socket.on("partroom", function(room) {
-    console.log("partroom", room);
     //remove the user from the room roster and room op roster.
     delete rooms[room].users[socket.username];
     // ====REMOVED ==== delete rooms[room].ops[socket.username];
@@ -186,8 +162,6 @@ io.on("connection", function(socket) {
 
   // when the user disconnects.. perform this
   socket.on("manualdisconnect", function() {
-    console.log("Server->disconnect");
-    console.log("disconnect", socket.username);
     if (socket.username) {
       //If the socket doesn't have a username the client joined and parted without
       //chosing a username, so we just close the socket without any cleanup.
@@ -223,9 +197,6 @@ io.on("connection", function(socket) {
 
   //When a user tries to op another user this gets performed.
   socket.on("op", function(opObj, fn) {
-    console.log(
-      socket.username + " opped " + opObj.user + " from " + opObj.room
-    );
     if (rooms[opObj.room].ops[socket.username] !== undefined) {
       //Remove the user from the room roster.
       // ===REMOVED=== delete rooms[opObj.room].users[opObj.user];
@@ -248,9 +219,6 @@ io.on("connection", function(socket) {
 
   //When a user tries to deop another user this gets performed.
   socket.on("deop", function(deopObj, fn) {
-    console.log(
-      socket.username + " deopped " + deopObj.user + " from " + deopObj.room
-    );
     //If user is OP
     if (rooms[deopObj.room].ops[socket.username] !== undefined) {
       //Remove the user from the room op roster.
@@ -274,15 +242,6 @@ io.on("connection", function(socket) {
 
   //When a user tries to kick another user this gets performed.
   socket.on("kick", function(kickObj, fn) {
-    console.log(
-      "kick > socket" +
-        socket.username +
-        " User " +
-        kickObj.user +
-        " Room " +
-        kickObj.room
-    );
-
     if (rooms[kickObj.room].ops[socket.username] !== undefined) {
       //Remove the user from the room roster.
       delete rooms[kickObj.room].users[kickObj.user];
@@ -297,26 +256,15 @@ io.on("connection", function(socket) {
         rooms[kickObj.room].users,
         rooms[kickObj.room].ops
       );
-      console.log(
-        socket.username + " kicked " + kickObj.user + " from " + kickObj.room
-      );
+
       fn(true);
     } else {
-      console.log("kicking failed");
       fn(false); // Send back failed, debugging..
     }
   });
 
   //Handles banning the user from a room.
   socket.on("ban", function(banObj, fn) {
-    console.log(
-      "ban > socket" +
-        socket.username +
-        " User " +
-        banObj.user +
-        " Room " +
-        banObj.room
-    );
     if (rooms[banObj.room].ops[socket.username] !== undefined) {
       //Remove the channel from the user in the global user roster.
       delete users[banObj.user].channels[banObj.room];
@@ -347,13 +295,11 @@ io.on("connection", function(socket) {
 
   //Returns a list of all avaliable rooms.
   socket.on("rooms", function() {
-    console.log("getRoomList");
     socket.emit("roomlist", rooms);
   });
 
   //Returns a list of all connected users.
   socket.on("users", function() {
-    console.log("Server->users");
     var userlist = [];
 
     //We need to construct the list since the users in the global user roster have a reference to socket, which has a reference
